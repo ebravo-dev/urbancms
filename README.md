@@ -1,61 +1,74 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Urban CMS - Sistema de Gestión de Contenido Inmobiliario
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
 </p>
 
-## About Laravel
+## Acerca de Urban CMS
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Urban CMS es un sistema de gestión de contenido especializado para el sector inmobiliario, desarrollado con Laravel. Esta plataforma permite a los usuarios, después de iniciar sesión, crear y gestionar publicaciones de propiedades inmobiliarias, incluyendo:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Descripción detallada de las propiedades
+- Información de precios
+- Carga y gestión de imágenes de las propiedades
+- Administración de listados de propiedades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Características Principales
 
-## Learning Laravel
+- **Sistema de Autenticación**: Registro e inicio de sesión de usuarios seguros.
+- **Gestión de Propiedades**: Interfaz intuitiva para crear, editar y eliminar publicaciones de propiedades.
+- **Galería de Imágenes**: Soporte para múltiples imágenes por propiedad.
+- **Diseño Responsivo**: Experiencia óptima en dispositivos móviles y de escritorio.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requisitos del Sistema
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP >= 8.1
+- Composer
+- MySQL o SQLite
+- Node.js y NPM para los assets
+- Extensiones PHP: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Instalación
 
-## Laravel Sponsors
+```bash
+# Clonar el repositorio
+git clone [url-del-repositorio] urbancms
+cd urbancms
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Instalar dependencias PHP
+composer install
 
-### Premium Partners
+# Instalar dependencias JavaScript
+npm install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Configurar variables de entorno
+cp .env.example .env
+php artisan key:generate
 
-## Contributing
+# Ejecutar migraciones
+php artisan migrate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Compilar assets
+npm run build
 
-## Code of Conduct
+# Iniciar el servidor
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Uso
 
-## Security Vulnerabilities
+1. Accede a la aplicación a través de la URL proporcionada por el servidor de desarrollo
+2. Regístrate o inicia sesión con tus credenciales
+3. Navega al panel de control para comenzar a crear publicaciones de propiedades
+4. Añade los detalles e imágenes de la propiedad y publícala
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Planes Futuros
 
-## License
+- Implementación de búsqueda avanzada de propiedades
+- Sistema de mensajería entre usuarios
+- Funcionalidades de reportes y estadísticas
+- Integración con servicios de mapas
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Licencia
+
+Este proyecto está licenciado bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
