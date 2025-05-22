@@ -8,39 +8,39 @@
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Gestión de Libros -->
+                <!-- Gestión de Artículos -->
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Libros') }}</h3>
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Artículos') }}</h3>
 
                         <div class="space-y-2">
                             <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Administrar Catálogo') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar libros</div>
+                                <div class="font-medium">{{ __('Administrar Artículos') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar artículos</div>
                             </a>
                             
                             <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Nuevo Libro') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Agregar una nueva publicación al catálogo</div>
+                                <div class="font-medium">{{ __('Nuevo Artículo') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Agregar un nuevo artículo al catálogo</div>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Gestión de Usuarios -->
+                <!-- Gestión de Blog -->
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Usuarios') }}</h3>
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Blog') }}</h3>
                         
                         <div class="space-y-2">
                             <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Administrar Usuarios') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar usuarios del sistema</div>
+                                <div class="font-medium">{{ __('Administrar Entradas') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar entradas del blog</div>
                             </a>
                             
                             <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Nuevo Usuario') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Agregar un nuevo usuario al sistema</div>
+                                <div class="font-medium">{{ __('Nueva Entrada') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Crear una nueva entrada para el blog</div>
                             </a>
                         </div>
                     </div>
@@ -58,27 +58,8 @@
                             </a>
                             
                             <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Ver Catálogo Público') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Visualizar el catálogo como lo ven los usuarios</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Estadísticas -->
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Estadísticas') }}</h3>
-                        
-                        <div class="space-y-2">
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Reportes') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Ver estadísticas y reportes del sistema</div>
-                            </a>
-                            
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Actividad Reciente') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Revisar la actividad reciente del sistema</div>
+                                <div class="font-medium">{{ __('Ver Sitio Público') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Visualizar el sitio como lo ven los usuarios</div>
                             </a>
                         </div>
                     </div>
