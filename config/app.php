@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | API Token
+    |--------------------------------------------------------------------------
+    |
+    | This value is the token used to authenticate API requests.
+    | Set this in your ".env" file.
+    |
+    */
+
+    'api_token' => env('API_TOKEN', 'urbanCMS-api-token-2025'),
+
 ];

@@ -96,15 +96,14 @@
                         @if($property->google_maps_url)
                             <div class="mb-6">
                                 <h2 class="text-xl font-semibold mb-2">Ubicación en Mapa</h2>
-                                <div class="aspect-video">
-                                    <iframe 
-                                        width="100%" 
-                                        height="100%" 
-                                        style="border:0" 
-                                        loading="lazy" 
-                                        allowfullscreen 
-                                        src="{{ $property->google_maps_url }}">
-                                    </iframe>
+                                <div>
+                                    <a href="{{ $property->google_maps_url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Ver ubicación en Google Maps
+                                    </a>
                                 </div>
                             </div>
                         @endif

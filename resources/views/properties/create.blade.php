@@ -50,9 +50,43 @@
                         <!-- Google Maps URL -->
                         <div>
                             <x-input-label for="google_maps_url" :value="__('GOOGLE MAPS')" />
-                            <x-text-input id="google_maps_url" name="google_maps_url" type="url" class="mt-1 block w-full" :value="old('google_maps_url')" placeholder="https://maps.google.com/..." />
+                            <div class="flex space-x-2">
+                                <x-text-input id="google_maps_url" name="google_maps_url" type="url" class="mt-1 block w-full" :value="old('google_maps_url')" placeholder="https://www.google.com/maps?q=ubicacion+de+la+propiedad" />
+                                <a id="open_maps_btn" href="https://www.google.com/maps" target="_blank" class="mt-1 px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    Abrir Maps
+                                </a>
+                            </div>
+                            
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const mapUrlField = document.getElementById('google_maps_url');
+                                    const openMapsBtn = document.getElementById('open_maps_btn');
+                                    
+                                    // Actualiza el enlace cuando cambia el campo de URL
+                                    mapUrlField.addEventListener('input', updateMapLink);
+                                    mapUrlField.addEventListener('change', updateMapLink);
+                                    
+                                    function updateMapLink() {
+                                        if (mapUrlField.value) {
+                                            openMapsBtn.href = mapUrlField.value;
+                                        } else {
+                                            openMapsBtn.href = 'https://www.google.com/maps';
+                                        }
+                                    }
+                                });
+                            </script>
+                            
                             <x-input-error :messages="$errors->get('google_maps_url')" class="mt-2" />
-                            <p class="text-sm text-gray-500 mt-1">Fijar con mapa o poner URL directa que en el formulario vengan las dos opciones</p>
+                            <p class="text-sm text-gray-500 mt-1">Instrucciones:</p>
+                            <ol class="list-decimal list-inside text-sm text-gray-500 ml-2 space-y-1">
+                                <li>Ve a <a href="https://www.google.com/maps" target="_blank" class="text-indigo-600 hover:text-indigo-800">Google Maps</a> y busca la ubicación de la propiedad</li>
+                                <li>Haz clic derecho en el punto exacto y selecciona "¿Qué hay aquí?" o "Compartir"</li>
+                                <li>Copia la URL desde tu navegador y pégala en este campo</li>
+                            </ol>
                         </div>
 
                         <!-- Características (8 campos) -->
@@ -325,5 +359,6 @@
                 document.getElementById('datasheet').dispatchEvent(event);
             }
         }
+
     </script>
 </x-app-layout>

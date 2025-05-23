@@ -50,46 +50,90 @@
 
                         <!-- Google Maps URL -->
                         <div>
-                            <x-input-label for="google_maps_url" :value="__('URL de Google Maps')" />
-                            <x-text-input id="google_maps_url" name="google_maps_url" type="url" class="mt-1 block w-full" :value="old('google_maps_url', $property->google_maps_url)" placeholder="https://maps.google.com/..." />
+                            <x-input-label for="google_maps_url" :value="__('GOOGLE MAPS')" />
+                            <div class="flex space-x-2">
+                                <x-text-input id="google_maps_url" name="google_maps_url" type="url" class="mt-1 block w-full" :value="old('google_maps_url', $property->google_maps_url)" placeholder="https://www.google.com/maps?q=ubicacion+de+la+propiedad" />
+                                <a id="open_maps_btn" href="https://www.google.com/maps" target="_blank" class="mt-1 px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    Abrir Maps
+                                </a>
+                            </div>
+                            
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const mapUrlField = document.getElementById('google_maps_url');
+                                    const openMapsBtn = document.getElementById('open_maps_btn');
+                                    
+                                    // Actualiza el enlace cuando cambia el campo de URL
+                                    mapUrlField.addEventListener('input', updateMapLink);
+                                    mapUrlField.addEventListener('change', updateMapLink);
+                                    
+                                    // Actualiza el enlace al cargar la página
+                                    updateMapLink();
+                                    
+                                    function updateMapLink() {
+                                        if (mapUrlField.value) {
+                                            openMapsBtn.href = mapUrlField.value;
+                                        } else {
+                                            openMapsBtn.href = 'https://www.google.com/maps';
+                                        }
+                                    }
+                                });
+                            </script>
                             <x-input-error :messages="$errors->get('google_maps_url')" class="mt-2" />
-                            <p class="text-sm text-gray-500 mt-1">Fijar con mapa o poner URL directa que en el formulario vengan las dos opciones</p>
+                            <p class="text-sm text-gray-500 mt-1">Instrucciones:</p>
+                            <ol class="list-decimal list-inside text-sm text-gray-500 ml-2 space-y-1">
+                                <li>Ve a <a href="https://www.google.com/maps" target="_blank" class="text-indigo-600 hover:text-indigo-800">Google Maps</a> y busca la ubicación de la propiedad</li>
+                                <li>Haz clic derecho en el punto exacto y selecciona "¿Qué hay aquí?" o "Compartir"</li>
+                                <li>Copia la URL desde tu navegador y pégala en este campo</li>
+                            </ol>
                         </div>
 
                         <!-- Características (8 campos) -->
                         <div>
-                            <x-input-label :value="__('Características')" />
+                            <x-input-label :value="__('CARACTERÍSTICAS')" />
                             <div class="mt-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <x-text-input id="feature1" name="feature1" type="text" class="mt-1 block w-full" :value="old('feature1', $property->feature1)" placeholder="Característica 1" />
+                                    <x-input-error :messages="$errors->get('feature1')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature2" name="feature2" type="text" class="mt-1 block w-full" :value="old('feature2', $property->feature2)" placeholder="Característica 2" />
+                                    <x-input-error :messages="$errors->get('feature2')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature3" name="feature3" type="text" class="mt-1 block w-full" :value="old('feature3', $property->feature3)" placeholder="Característica 3" />
+                                    <x-input-error :messages="$errors->get('feature3')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature4" name="feature4" type="text" class="mt-1 block w-full" :value="old('feature4', $property->feature4)" placeholder="Característica 4" />
+                                    <x-input-error :messages="$errors->get('feature4')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature5" name="feature5" type="text" class="mt-1 block w-full" :value="old('feature5', $property->feature5)" placeholder="Característica 5" />
+                                    <x-input-error :messages="$errors->get('feature5')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature6" name="feature6" type="text" class="mt-1 block w-full" :value="old('feature6', $property->feature6)" placeholder="Característica 6" />
+                                    <x-input-error :messages="$errors->get('feature6')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature7" name="feature7" type="text" class="mt-1 block w-full" :value="old('feature7', $property->feature7)" placeholder="Característica 7" />
+                                    <x-input-error :messages="$errors->get('feature7')" class="mt-2" />
                                 </div>
                                 <div>
                                     <x-text-input id="feature8" name="feature8" type="text" class="mt-1 block w-full" :value="old('feature8', $property->feature8)" placeholder="Característica 8" />
+                                    <x-input-error :messages="$errors->get('feature8')" class="mt-2" />
                                 </div>
                             </div>
                         </div>
 
                         <!-- Inversión (Precio) -->
                         <div>
-                            <x-input-label for="investment" :value="__('Inversión')" />
+                            <x-input-label for="investment" :value="__('INVERSIÓN')" />
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <span class="text-gray-500 sm:text-sm">$</span>
@@ -100,64 +144,6 @@
                                 </div>
                             </div>
                             <x-input-error :messages="$errors->get('investment')" class="mt-2" />
-                        </div>
-
-                        
-                        <!-- Google Maps URL -->
-                        <div>
-                            <x-input-label for="google_maps_url" :value="__('GOOGLE MAPS')" />
-                            <x-text-input id="google_maps_url" name="google_maps_url" type="url" class="mt-1 block w-full" :value="old('google_maps_url', $property->google_maps_url)" placeholder="https://maps.google.com/..." />
-                            <x-input-error :messages="$errors->get('google_maps_url')" class="mt-2" />
-                            <p class="text-sm text-gray-500 mt-1">Fijar con mapa o poner URL directa que en el formulario vengan las dos opciones</p>
-                        </div>
-
-                        <!-- Características (8 campos) -->
-                        <div>
-                            <x-input-label for="feature1" :value="__('CARACTERISTICA 1')" />
-                            <x-text-input id="feature1" name="feature1" type="text" class="mt-1 block w-full" :value="old('feature1', $property->feature1)" />
-                            <x-input-error :messages="$errors->get('feature1')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature2" :value="__('CARACTERISTICA 2')" />
-                            <x-text-input id="feature2" name="feature2" type="text" class="mt-1 block w-full" :value="old('feature2', $property->feature2)" />
-                            <x-input-error :messages="$errors->get('feature2')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature3" :value="__('CARACTERISTICA 3')" />
-                            <x-text-input id="feature3" name="feature3" type="text" class="mt-1 block w-full" :value="old('feature3', $property->feature3)" />
-                            <x-input-error :messages="$errors->get('feature3')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature4" :value="__('CARACTERISTICA 4')" />
-                            <x-text-input id="feature4" name="feature4" type="text" class="mt-1 block w-full" :value="old('feature4', $property->feature4)" />
-                            <x-input-error :messages="$errors->get('feature4')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature5" :value="__('CARACTERISTICA 5')" />
-                            <x-text-input id="feature5" name="feature5" type="text" class="mt-1 block w-full" :value="old('feature5', $property->feature5)" />
-                            <x-input-error :messages="$errors->get('feature5')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature6" :value="__('CARACTERISTICA 6')" />
-                            <x-text-input id="feature6" name="feature6" type="text" class="mt-1 block w-full" :value="old('feature6', $property->feature6)" />
-                            <x-input-error :messages="$errors->get('feature6')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature7" :value="__('CARACTERISTICA 7')" />
-                            <x-text-input id="feature7" name="feature7" type="text" class="mt-1 block w-full" :value="old('feature7', $property->feature7)" />
-                            <x-input-error :messages="$errors->get('feature7')" class="mt-2" />
-                        </div>
-                        
-                        <div>
-                            <x-input-label for="feature8" :value="__('CARACTERISTICA 8')" />
-                            <x-text-input id="feature8" name="feature8" type="text" class="mt-1 block w-full" :value="old('feature8', $property->feature8)" />
-                            <x-input-error :messages="$errors->get('feature8')" class="mt-2" />
                         </div>
                         
                         <!-- Imágenes actuales y eliminación -->
@@ -283,15 +269,6 @@
                         </div>
                         
                         <div class="flex items-center justify-end mt-6">
-                            <a href="{{ route('properties.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-2">
-                                Cancelar
-                            </a>
-                            <x-primary-button>
-                                {{ __('Guardar') }}
-                            </x-primary-button>
-                        </div>
-
-                        <div class="flex items-center justify-end">
                             <a href="{{ route('properties.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-2">
                                 Cancelar
                             </a>
@@ -515,5 +492,6 @@
                 document.getElementById('datasheet').dispatchEvent(event);
             }
         }
+        
     </script>
 </x-app-layout>
