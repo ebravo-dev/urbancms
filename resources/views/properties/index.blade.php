@@ -26,9 +26,10 @@
                                 <thead class="bg-gray-100">
                                     <tr>
                                         <th class="py-2 px-4 border-b text-left">ID</th>
-                                        <th class="py-2 px-4 border-b text-left">Título</th>
-                                        <th class="py-2 px-4 border-b text-left">Imagen Principal</th>
-                                        <th class="py-2 px-4 border-b text-left">Ficha Técnica</th>
+                                        <th class="py-2 px-4 border-b text-left">Tipo</th>
+                                        <th class="py-2 px-4 border-b text-left">Ubicación</th>
+                                        <th class="py-2 px-4 border-b text-left">Inversión</th>
+                                        <th class="py-2 px-4 border-b text-left">Imagen</th>
                                         <th class="py-2 px-4 border-b text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -36,23 +37,28 @@
                                     @foreach($properties as $property)
                                         <tr>
                                             <td class="py-2 px-4 border-b">{{ $property->id }}</td>
-                                            <td class="py-2 px-4 border-b">{{ $property->title }}</td>
                                             <td class="py-2 px-4 border-b">
-                                                @if($property->images->count() > 0)
-                                                    <img src="{{ asset('storage/' . $property->images->first()->image_path) }}" 
-                                                         alt="{{ $property->title }}" 
-                                                         class="h-16 w-auto object-cover">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium {{ $property->is_for_sale ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                                    {{ $property->is_for_sale ? 'Venta' : 'Renta' }}
+                                                </span>
+                                            </td>
+                                            <td class="py-2 px-4 border-b">
+                                                {{ $property->location_line1 ?? 'N/A' }}
+                                            </td>
+                                            <td class="py-2 px-4 border-b">
+                                                @if($property->investment)
+                                                    <span class="font-medium text-green-700">${{ number_format($property->investment, 2) }}</span>
                                                 @else
-                                                    <span class="text-gray-400">Sin imagen</span>
+                                                    <span class="text-gray-400">No especificada</span>
                                                 @endif
                                             </td>
                                             <td class="py-2 px-4 border-b">
-                                                @if($property->datasheet_path)
-                                                    <a href="{{ asset('storage/' . $property->datasheet_path) }}" 
-                                                       target="_blank" 
-                                                       class="text-blue-500 hover:underline">Ver ficha</a>
+                                                @if($property->image1)
+                                                    <img src="{{ asset('storage/' . $property->image1) }}" 
+                                                         alt="Imagen principal" 
+                                                         class="h-16 w-auto object-cover">
                                                 @else
-                                                    <span class="text-gray-400">Sin ficha</span>
+                                                    <span class="text-gray-400">Sin imagen</span>
                                                 @endif
                                             </td>
                                             <td class="py-2 px-4 border-b text-center">

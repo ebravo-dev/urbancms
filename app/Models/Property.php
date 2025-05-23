@@ -11,16 +11,23 @@ class Property extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'datasheet_path',
+        'is_for_sale',
+        'location_line1',
+        'location_line2',
+        'location_line3',
+        'google_maps_url',
+        'feature1',
+        'feature2',
+        'feature3',
+        'feature4',
+        'feature5',
+        'feature6',
+        'feature7',
+        'feature8',
+        'investment',
+        'image1',
+        'image2',
+        'image3',
+        'image4',
     ];
-
-    /**
-     * Get the images for the property.
-     */
-    public function images(): HasMany
-    {
-        return $this->hasMany(PropertyImage::class)->orderBy('order');
-    }
 }

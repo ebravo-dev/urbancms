@@ -14,7 +14,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::with('images')->latest()->paginate(10);
+        $properties = Property::latest()->paginate(10);
         return view('properties.index', compact('properties'));
     }
 
@@ -32,38 +32,65 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'datasheet' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:2048',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'is_for_sale' => 'required|boolean',
+            'location_line1' => 'nullable|string|max:255',
+            'location_line2' => 'nullable|string|max:255',
+            'location_line3' => 'nullable|string|max:255',
+            'google_maps_url' => 'nullable|url|max:2000',
+            'feature1' => 'nullable|string|max:255',
+            'feature2' => 'nullable|string|max:255',
+            'feature3' => 'nullable|string|max:255',
+            'feature4' => 'nullable|string|max:255',
+            'feature5' => 'nullable|string|max:255',
+            'feature6' => 'nullable|string|max:255',
+            'feature7' => 'nullable|string|max:255',
+            'feature8' => 'nullable|string|max:255',
+            'investment' => 'nullable|numeric',
+            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Store property
         $property = new Property();
-        $property->title = $validated['title'];
-        $property->description = $validated['description'];
+        $property->is_for_sale = $validated['is_for_sale'];
+        $property->location_line1 = $validated['location_line1'] ?? null;
+        $property->location_line2 = $validated['location_line2'] ?? null;
+        $property->location_line3 = $validated['location_line3'] ?? null;
+        $property->google_maps_url = $validated['google_maps_url'] ?? null;
+        $property->feature1 = $validated['feature1'] ?? null;
+        $property->feature2 = $validated['feature2'] ?? null;
+        $property->feature3 = $validated['feature3'] ?? null;
+        $property->feature4 = $validated['feature4'] ?? null;
+        $property->feature5 = $validated['feature5'] ?? null;
+        $property->feature6 = $validated['feature6'] ?? null;
+        $property->feature7 = $validated['feature7'] ?? null;
+        $property->feature8 = $validated['feature8'] ?? null;
+        $property->investment = $validated['investment'] ?? null;
 
-        // Store datasheet if provided
-        if ($request->hasFile('datasheet')) {
-            $datasheetPath = $request->file('datasheet')->store('datasheets', 'public');
-            $property->datasheet_path = $datasheetPath;
+        // Store images if provided
+        if ($request->hasFile('image1')) {
+            $imagePath = $request->file('image1')->store('property-images', 'public');
+            $property->image1 = $imagePath;
+        }
+
+        if ($request->hasFile('image2')) {
+            $imagePath = $request->file('image2')->store('property-images', 'public');
+            $property->image2 = $imagePath;
+        }
+
+        if ($request->hasFile('image3')) {
+            $imagePath = $request->file('image3')->store('property-images', 'public');
+            $property->image3 = $imagePath;
+        }
+
+        if ($request->hasFile('image4')) {
+            $imagePath = $request->file('image4')->store('property-images', 'public');
+            $property->image4 = $imagePath;
         }
 
         $property->save();
-
-        // Store images if provided
-        if ($request->hasFile('images')) {
-            $order = 0;
-            foreach ($request->file('images') as $image) {
-                $imagePath = $image->store('property-images', 'public');
-
-                $propertyImage = new PropertyImage();
-                $propertyImage->property_id = $property->id;
-                $propertyImage->image_path = $imagePath;
-                $propertyImage->order = $order++;
-                $propertyImage->save();
-            }
-        }
 
         return redirect()->route('properties.index')->with('success', 'Propiedad creada exitosamente');
     }
@@ -90,56 +117,109 @@ class PropertyController extends Controller
     public function update(Request $request, Property $property)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'datasheet' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:2048',
-            'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'delete_images.*' => 'nullable|integer',
+            'is_for_sale' => 'required|boolean',
+            'location_line1' => 'nullable|string|max:255',
+            'location_line2' => 'nullable|string|max:255',
+            'location_line3' => 'nullable|string|max:255',
+            'google_maps_url' => 'nullable|url|max:2000',
+            'feature1' => 'nullable|string|max:255',
+            'feature2' => 'nullable|string|max:255',
+            'feature3' => 'nullable|string|max:255',
+            'feature4' => 'nullable|string|max:255',
+            'feature5' => 'nullable|string|max:255',
+            'feature6' => 'nullable|string|max:255',
+            'feature7' => 'nullable|string|max:255',
+            'feature8' => 'nullable|string|max:255',
+            'investment' => 'nullable|numeric',
+            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'delete_image1' => 'nullable|boolean',
+            'delete_image2' => 'nullable|boolean',
+            'delete_image3' => 'nullable|boolean',
+            'delete_image4' => 'nullable|boolean',
         ]);
 
         // Update property
-        $property->title = $validated['title'];
-        $property->description = $validated['description'];
+        $property->is_for_sale = $validated['is_for_sale'];
+        $property->location_line1 = $validated['location_line1'] ?? null;
+        $property->location_line2 = $validated['location_line2'] ?? null;
+        $property->location_line3 = $validated['location_line3'] ?? null;
+        $property->google_maps_url = $validated['google_maps_url'] ?? null;
+        $property->feature1 = $validated['feature1'] ?? null;
+        $property->feature2 = $validated['feature2'] ?? null;
+        $property->feature3 = $validated['feature3'] ?? null;
+        $property->feature4 = $validated['feature4'] ?? null;
+        $property->feature5 = $validated['feature5'] ?? null;
+        $property->feature6 = $validated['feature6'] ?? null;
+        $property->feature7 = $validated['feature7'] ?? null;
+        $property->feature8 = $validated['feature8'] ?? null;
+        $property->investment = $validated['investment'] ?? null;
 
-        // Update datasheet if provided
-        if ($request->hasFile('datasheet')) {
-            // Delete old datasheet if exists
-            if ($property->datasheet_path) {
-                Storage::disk('public')->delete($property->datasheet_path);
+        // Handle image deletions
+        if ($request->has('delete_image1') && $request->delete_image1) {
+            if ($property->image1) {
+                Storage::disk('public')->delete($property->image1);
+                $property->image1 = null;
             }
+        }
 
-            $datasheetPath = $request->file('datasheet')->store('datasheets', 'public');
-            $property->datasheet_path = $datasheetPath;
+        if ($request->has('delete_image2') && $request->delete_image2) {
+            if ($property->image2) {
+                Storage::disk('public')->delete($property->image2);
+                $property->image2 = null;
+            }
+        }
+
+        if ($request->has('delete_image3') && $request->delete_image3) {
+            if ($property->image3) {
+                Storage::disk('public')->delete($property->image3);
+                $property->image3 = null;
+            }
+        }
+
+        if ($request->has('delete_image4') && $request->delete_image4) {
+            if ($property->image4) {
+                Storage::disk('public')->delete($property->image4);
+                $property->image4 = null;
+            }
+        }
+
+        // Update images if provided
+        if ($request->hasFile('image1')) {
+            if ($property->image1) {
+                Storage::disk('public')->delete($property->image1);
+            }
+            $imagePath = $request->file('image1')->store('property-images', 'public');
+            $property->image1 = $imagePath;
+        }
+
+        if ($request->hasFile('image2')) {
+            if ($property->image2) {
+                Storage::disk('public')->delete($property->image2);
+            }
+            $imagePath = $request->file('image2')->store('property-images', 'public');
+            $property->image2 = $imagePath;
+        }
+
+        if ($request->hasFile('image3')) {
+            if ($property->image3) {
+                Storage::disk('public')->delete($property->image3);
+            }
+            $imagePath = $request->file('image3')->store('property-images', 'public');
+            $property->image3 = $imagePath;
+        }
+
+        if ($request->hasFile('image4')) {
+            if ($property->image4) {
+                Storage::disk('public')->delete($property->image4);
+            }
+            $imagePath = $request->file('image4')->store('property-images', 'public');
+            $property->image4 = $imagePath;
         }
 
         $property->save();
-
-        // Delete images if requested
-        if ($request->has('delete_images')) {
-            foreach ($request->delete_images as $imageId) {
-                $image = PropertyImage::find($imageId);
-                if ($image && $image->property_id == $property->id) {
-                    Storage::disk('public')->delete($image->image_path);
-                    $image->delete();
-                }
-            }
-        }
-
-        // Add new images if provided
-        if ($request->hasFile('new_images')) {
-            $maxOrder = $property->images()->max('order') ?? -1;
-            $order = $maxOrder + 1;
-
-            foreach ($request->file('new_images') as $image) {
-                $imagePath = $image->store('property-images', 'public');
-
-                $propertyImage = new PropertyImage();
-                $propertyImage->property_id = $property->id;
-                $propertyImage->image_path = $imagePath;
-                $propertyImage->order = $order++;
-                $propertyImage->save();
-            }
-        }
 
         return redirect()->route('properties.index')->with('success', 'Propiedad actualizada exitosamente');
     }
@@ -150,38 +230,21 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         // Delete all images
-        foreach ($property->images as $image) {
-            Storage::disk('public')->delete($image->image_path);
+        if ($property->image1) {
+            Storage::disk('public')->delete($property->image1);
         }
-
-        // Delete datasheet if exists
-        if ($property->datasheet_path) {
-            Storage::disk('public')->delete($property->datasheet_path);
+        if ($property->image2) {
+            Storage::disk('public')->delete($property->image2);
+        }
+        if ($property->image3) {
+            Storage::disk('public')->delete($property->image3);
+        }
+        if ($property->image4) {
+            Storage::disk('public')->delete($property->image4);
         }
 
         $property->delete();
 
         return redirect()->route('properties.index')->with('success', 'Propiedad eliminada exitosamente');
-    }
-
-    /**
-     * Reorder images
-     */
-    public function reorderImages(Request $request, Property $property)
-    {
-        $validated = $request->validate([
-            'images' => 'required|array',
-            'images.*' => 'required|integer|exists:property_images,id',
-        ]);
-
-        foreach ($validated['images'] as $order => $imageId) {
-            $image = PropertyImage::find($imageId);
-            if ($image && $image->property_id == $property->id) {
-                $image->order = $order;
-                $image->save();
-            }
-        }
-
-        return response()->json(['success' => true]);
     }
 }
