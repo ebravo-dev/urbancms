@@ -37,13 +37,24 @@ class PropertyResource extends JsonResource
             'investment' => $this->investment,
             'investment_formatted' => '$ ' . number_format($this->investment, 2) . ' MXN',
             'images' => array_filter([
-                $this->image1 ? asset('storage/' . $this->image1) : null,
-                $this->image2 ? asset('storage/' . $this->image2) : null,
-                $this->image3 ? asset('storage/' . $this->image3) : null,
-                $this->image4 ? asset('storage/' . $this->image4) : null,
+                $this->image1 ? $this->isExternalUrl($this->image1) ? $this->image1 : asset('storage/' . $this->image1) : null,
+                $this->image2 ? $this->isExternalUrl($this->image2) ? $this->image2 : asset('storage/' . $this->image2) : null,
+                $this->image3 ? $this->isExternalUrl($this->image3) ? $this->image3 : asset('storage/' . $this->image3) : null,
+                $this->image4 ? $this->isExternalUrl($this->image4) ? $this->image4 : asset('storage/' . $this->image4) : null,
             ]),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+    }
+
+    /**
+     * Check if a given string is an external URL.
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isExternalUrl(string $url): bool
+    {
+        return str_starts_with($url, 'http://') || str_starts_with($url, 'https://');
     }
 }

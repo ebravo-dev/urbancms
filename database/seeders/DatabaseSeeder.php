@@ -22,5 +22,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('asdqwe123'),
             'email_verified_at' => now(),
         ]);
+        
+        // Seed example properties
+        $this->call(PropertySeeder::class);
     }
 }
