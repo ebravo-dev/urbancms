@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,9 +17,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Artículos
-    Route::resource('articles', ArticleController::class);
-    Route::post('/articles/{article}/reorder-images', [ArticleController::class, 'reorderImages'])->name('articles.reorder-images');
+    // Propiedades
+    Route::resource('properties', PropertyController::class);
+    Route::post('/properties/{property}/reorder-images', [PropertyController::class, 'reorderImages'])->name('properties.reorder-images');
 });
+
+require __DIR__ . '/auth.php';
 
 require __DIR__ . '/auth.php';

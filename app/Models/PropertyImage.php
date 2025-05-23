@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ArticleImage extends Model
+class PropertyImage extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'article_id',
+        'property_id',
         'image_path',
         'order',
     ];
 
     /**
-     * Get the article that owns the image.
+     * Get the property that owns the image.
      */
-    public function article(): BelongsTo
+    public function property(): BelongsTo
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsTo(Property::class);
     }
 }

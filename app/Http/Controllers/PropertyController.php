@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use App\Models\ArticleImage;
+use App\Models\Property;
+use App\Models\PropertyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ArticleController extends Controller
+class PropertyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $articles = Article::with('images')->latest()->paginate(10);
-        return view('articles.index', compact('articles'));
+        $properties = Property::with('images')->latest()->paginate(10);
+        return view('properties.index', compact('properties'));
     }
 
     /**
@@ -23,7 +23,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create');
+        return view('properties.create');
     }
 
     /**
@@ -38,56 +38,56 @@ class ArticleController extends Controller
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // Store article
-        $article = new Article();
-        $article->title = $validated['title'];
-        $article->description = $validated['description'];
+        // Store property
+        $property = new Property();
+        $property->title = $validated['title'];
+        $property->description = $validated['description'];
 
         // Store datasheet if provided
         if ($request->hasFile('datasheet')) {
             $datasheetPath = $request->file('datasheet')->store('datasheets', 'public');
-            $article->datasheet_path = $datasheetPath;
+            $property->datasheet_path = $datasheetPath;
         }
 
-        $article->save();
+        $property->save();
 
         // Store images if provided
         if ($request->hasFile('images')) {
             $order = 0;
             foreach ($request->file('images') as $image) {
-                $imagePath = $image->store('article-images', 'public');
+                $imagePath = $image->store('property-images', 'public');
 
-                $articleImage = new ArticleImage();
-                $articleImage->article_id = $article->id;
-                $articleImage->image_path = $imagePath;
-                $articleImage->order = $order++;
-                $articleImage->save();
+                $propertyImage = new PropertyImage();
+                $propertyImage->property_id = $property->id;
+                $propertyImage->image_path = $imagePath;
+                $propertyImage->order = $order++;
+                $propertyImage->save();
             }
         }
 
-        return redirect()->route('articles.index')->with('success', 'Artículo creado exitosamente');
+        return redirect()->route('properties.index')->with('success', 'Propiedad creada exitosamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(Property $property)
     {
-        return view('articles.show', compact('article'));
+        return view('properties.show', compact('property'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Article $article)
+    public function edit(Property $property)
     {
-        return view('articles.edit', compact('article'));
+        return view('properties.edit', compact('property'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(Request $request, Property $property)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -97,28 +97,28 @@ class ArticleController extends Controller
             'delete_images.*' => 'nullable|integer',
         ]);
 
-        // Update article
-        $article->title = $validated['title'];
-        $article->description = $validated['description'];
+        // Update property
+        $property->title = $validated['title'];
+        $property->description = $validated['description'];
 
         // Update datasheet if provided
         if ($request->hasFile('datasheet')) {
             // Delete old datasheet if exists
-            if ($article->datasheet_path) {
-                Storage::disk('public')->delete($article->datasheet_path);
+            if ($property->datasheet_path) {
+                Storage::disk('public')->delete($property->datasheet_path);
             }
 
             $datasheetPath = $request->file('datasheet')->store('datasheets', 'public');
-            $article->datasheet_path = $datasheetPath;
+            $property->datasheet_path = $datasheetPath;
         }
 
-        $article->save();
+        $property->save();
 
         // Delete images if requested
         if ($request->has('delete_images')) {
             foreach ($request->delete_images as $imageId) {
-                $image = ArticleImage::find($imageId);
-                if ($image && $image->article_id == $article->id) {
+                $image = PropertyImage::find($imageId);
+                if ($image && $image->property_id == $property->id) {
                     Storage::disk('public')->delete($image->image_path);
                     $image->delete();
                 }
@@ -127,56 +127,56 @@ class ArticleController extends Controller
 
         // Add new images if provided
         if ($request->hasFile('new_images')) {
-            $maxOrder = $article->images()->max('order') ?? -1;
+            $maxOrder = $property->images()->max('order') ?? -1;
             $order = $maxOrder + 1;
 
             foreach ($request->file('new_images') as $image) {
-                $imagePath = $image->store('article-images', 'public');
+                $imagePath = $image->store('property-images', 'public');
 
-                $articleImage = new ArticleImage();
-                $articleImage->article_id = $article->id;
-                $articleImage->image_path = $imagePath;
-                $articleImage->order = $order++;
-                $articleImage->save();
+                $propertyImage = new PropertyImage();
+                $propertyImage->property_id = $property->id;
+                $propertyImage->image_path = $imagePath;
+                $propertyImage->order = $order++;
+                $propertyImage->save();
             }
         }
 
-        return redirect()->route('articles.index')->with('success', 'Artículo actualizado exitosamente');
+        return redirect()->route('properties.index')->with('success', 'Propiedad actualizada exitosamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy(Property $property)
     {
         // Delete all images
-        foreach ($article->images as $image) {
+        foreach ($property->images as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
 
         // Delete datasheet if exists
-        if ($article->datasheet_path) {
-            Storage::disk('public')->delete($article->datasheet_path);
+        if ($property->datasheet_path) {
+            Storage::disk('public')->delete($property->datasheet_path);
         }
 
-        $article->delete();
+        $property->delete();
 
-        return redirect()->route('articles.index')->with('success', 'Artículo eliminado exitosamente');
+        return redirect()->route('properties.index')->with('success', 'Propiedad eliminada exitosamente');
     }
 
     /**
      * Reorder images
      */
-    public function reorderImages(Request $request, Article $article)
+    public function reorderImages(Request $request, Property $property)
     {
         $validated = $request->validate([
             'images' => 'required|array',
-            'images.*' => 'required|integer|exists:article_images,id',
+            'images.*' => 'required|integer|exists:property_images,id',
         ]);
 
         foreach ($validated['images'] as $order => $imageId) {
-            $image = ArticleImage::find($imageId);
-            if ($image && $image->article_id == $article->id) {
+            $image = PropertyImage::find($imageId);
+            if ($image && $image->property_id == $property->id) {
                 $image->order = $order;
                 $image->save();
             }

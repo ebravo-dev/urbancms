@@ -8,20 +8,20 @@
     <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Gestión de Artículos -->
+                <!-- Gestión de Propiedades -->
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Artículos') }}</h3>
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Propiedades') }}</h3>
 
                         <div class="space-y-2">
-                            <a href="{{ route('articles.index') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Administrar Artículos') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar artículos</div>
+                            <a href="{{ route('properties.index') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                                <div class="font-medium">{{ __('Administrar Propiedades') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar propiedades</div>
                             </a>
                             
-                            <a href="{{ route('articles.create') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
-                                <div class="font-medium">{{ __('Nuevo Artículo') }}</div>
-                                <div class="text-sm text-gray-500 mt-1">Agregar un nuevo artículo al catálogo</div>
+                            <a href="{{ route('properties.create') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                                <div class="font-medium">{{ __('Nueva Propiedad') }}</div>
+                                <div class="text-sm text-gray-500 mt-1">Agregar una nueva propiedad al catálogo</div>
                             </a>
                         </div>
                     </div>
