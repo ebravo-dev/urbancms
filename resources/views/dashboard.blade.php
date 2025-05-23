@@ -14,12 +14,12 @@
                         <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Artículos') }}</h3>
 
                         <div class="space-y-2">
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="{{ route('articles.index') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Administrar Artículos') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar artículos</div>
                             </a>
                             
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="{{ route('articles.create') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Nuevo Artículo') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Agregar un nuevo artículo al catálogo</div>
                             </a>
