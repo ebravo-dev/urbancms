@@ -36,23 +36,23 @@
                                 <tbody>
                                     @foreach($properties as $property)
                                         <tr>
-                                            <td class="py-2 px-4 border-b">{{ $property->id }}</td>
-                                            <td class="py-2 px-4 border-b">
+                                            <td class="py-2 px-4 border-b cursor-pointer" onclick="window.location='{{ route('properties.show', $property) }}'">{{ $property->id }}</td>
+                                            <td class="py-2 px-4 border-b cursor-pointer" onclick="window.location='{{ route('properties.show', $property) }}'">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium {{ $property->is_for_sale ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
                                                     {{ $property->is_for_sale ? 'Venta' : 'Renta' }}
                                                 </span>
                                             </td>
-                                            <td class="py-2 px-4 border-b">
+                                            <td class="py-2 px-4 border-b cursor-pointer" onclick="window.location='{{ route('properties.show', $property) }}'">
                                                 {{ $property->location_line1 ?? 'N/A' }}
                                             </td>
-                                            <td class="py-2 px-4 border-b">
+                                            <td class="py-2 px-4 border-b cursor-pointer" onclick="window.location='{{ route('properties.show', $property) }}'">
                                                 @if($property->investment)
                                                     <span class="font-medium text-green-700">${{ number_format($property->investment, 2) }}</span>
                                                 @else
                                                     <span class="text-gray-400">No especificada</span>
                                                 @endif
                                             </td>
-                                            <td class="py-2 px-4 border-b">
+                                            <td class="py-2 px-4 border-b cursor-pointer" onclick="window.location='{{ route('properties.show', $property) }}'">
                                                 @if($property->image1)
                                                     <img src="{{ asset('storage/' . $property->image1) }}" 
                                                          alt="Imagen principal" 
@@ -62,18 +62,13 @@
                                                 @endif
                                             </td>
                                             <td class="py-2 px-4 border-b text-center">
-                                                <div class="flex justify-center space-x-2">
-                                                    <a href="{{ route('properties.edit', $property) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                        Editar
-                                                    </a>
-                                                    <form action="{{ route('properties.destroy', $property) }}" method="POST" class="inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="return confirm('¿Estás seguro de eliminar esta propiedad?')">
-                                                            Eliminar
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                <a href="{{ route('properties.show', $property) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    VER
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -92,4 +87,55 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .clickable-row {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .clickable-row:hover td {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .clickable-row:hover {
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+        }
+        /* Mantener el cursor normal en botones y enlaces */
+        .clickable-row td:last-child a {
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        // Manejo de filas clickeables
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                row.classList.add('clickable-row');
+                
+                // Evitar que el evento de click en los botones propague al tr
+                const actionCell = row.querySelector('td:last-child');
+                if (actionCell) {
+                    actionCell.addEventListener('click', function(e) {
+                        if (e.target.tagName === 'A' || e.target.closest('a')) {
+                            e.stopPropagation();
+                        }
+                    });
+                }
+                
+                // Añadir evento click a toda la fila
+                row.addEventListener('click', function(e) {
+                    // No hacer nada si hacemos clic en un enlace o botón
+                    if (e.target.tagName === 'A' || e.target.closest('a') || 
+                        e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                        return;
+                    }
+                    
+                    // Obtener el ID de la propiedad
+                    const id = row.querySelector('td:first-child').textContent.trim();
+                    // Redirigir a la página de detalle
+                    window.location.href = '/properties/' + id;
+                });
+            });
+        });
+    </script>
 </x-app-layout>
