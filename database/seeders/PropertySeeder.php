@@ -24,12 +24,21 @@ class PropertySeeder extends Seeder
     {
         $this->command->info('Creating example properties...');
 
-        // Create 5 example properties
+        // Create 5 original example properties
         $this->createResidentialProperty();
         $this->createCommercialProperty();
         $this->createLuxuryApartment();
         $this->createVacationHome();
         $this->createLandProperty();
+
+        // Create 7 additional properties
+        $this->createModernLoft();
+        $this->createHistoricHouse();
+        $this->createRetailSpace();
+        $this->createIndustrialWarehouse();
+        $this->createMountainCabin();
+        $this->createBeachCondo();
+        $this->createStudentStudio();
 
         $this->command->info('Properties created successfully!');
     }
@@ -43,6 +52,7 @@ class PropertySeeder extends Seeder
      */
     protected function fetchImagesFromPexels(string $query, int $count = 4): array
     {
+        return [];
         try {
             // Using the API key as a header value as per Pexels API documentation
             $response = Http::withHeaders([
@@ -282,5 +292,271 @@ class PropertySeeder extends Seeder
             'image3' => $images[2] ?? null,
             'image4' => $images[3] ?? null,
         ]);
+    }
+
+    /**
+     * Create a modern loft property example.
+     */
+    protected function createModernLoft(): void
+    {
+        $images = $this->fetchImagesFromPexels('modern loft apartment', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg',
+                'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg',
+                'https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg',
+                'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => true,
+            'location_line1' => 'Av. Chapultepec 500',
+            'location_line2' => 'Col. Roma Norte',
+            'location_line3' => 'Ciudad de México, CP 06700',
+            'google_maps_url' => 'https://www.google.com/maps?q=19.4176371,-99.1631208',
+            'feature1' => 'Loft de 120m²',
+            'feature2' => 'Techos altos de 4m',
+            'feature3' => 'Ventanales de piso a techo',
+            'feature4' => 'Cocina integrada tipo isla',
+            'feature5' => 'Acabados industriales',
+            'feature6' => '1 Recámara tipo mezzanine',
+            'feature7' => '2 Baños completos',
+            'feature8' => 'Estacionamiento para 1 auto',
+            'investment' => 5800000.00,
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a historic house property example.
+     */
+    protected function createHistoricHouse(): void
+    {
+        $images = $this->fetchImagesFromPexels('historic colonial house', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg',
+                'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg',
+                'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg',
+                'https://images.pexels.com/photos/2635038/pexels-photo-2635038.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => true,
+            'location_line1' => 'Calle 59 #510',
+            'location_line2' => 'Centro Histórico',
+            'location_line3' => 'Mérida, Yucatán, CP 97000',
+            'google_maps_url' => 'https://www.google.com/maps?q=20.9673702,-89.5925857',
+            'feature1' => 'Casona colonial de 350m²',
+            'feature2' => 'Arquitectura del siglo XIX',
+            'feature3' => '4 Recámaras con baño',
+            'feature4' => 'Patio central con fuente',
+            'feature5' => 'Techos de 6m con vigas originales',
+            'feature6' => 'Pisos de pasta',
+            'feature7' => 'Alberca y jardín trasero',
+            'feature8' => 'Completamente restaurada',
+            'investment' => 8500000.00,
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a retail space property example.
+     */
+    protected function createRetailSpace(): void
+    {
+        $images = $this->fetchImagesFromPexels('retail store shop', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg',
+                'https://images.pexels.com/photos/264635/pexels-photo-264635.jpeg',
+                'https://images.pexels.com/photos/1667088/pexels-photo-1667088.jpeg',
+                'https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => false, // For rent
+            'location_line1' => 'Plaza Andares, Local B-15',
+            'location_line2' => 'Blvd. Puerta de Hierro 4965',
+            'location_line3' => 'Zapopan, Jalisco, CP 45116',
+            'google_maps_url' => 'https://www.google.com/maps?q=20.7102783,-103.4103589',
+            'feature1' => 'Local comercial de 85m²',
+            'feature2' => 'Frente de 8m con escaparate',
+            'feature3' => 'Ubicación de alto tráfico peatonal',
+            'feature4' => 'Aire acondicionado',
+            'feature5' => 'Medio baño',
+            'feature6' => 'Bodega trasera de 15m²',
+            'feature7' => 'Instalaciones eléctricas certificadas',
+            'feature8' => 'Seguridad 24/7 en plaza',
+            'investment' => 45000.00, // Monthly rent
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create an industrial warehouse property example.
+     */
+    protected function createIndustrialWarehouse(): void
+    {
+        $images = $this->fetchImagesFromPexels('industrial warehouse', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/236705/pexels-photo-236705.jpeg',
+                'https://images.pexels.com/photos/3800060/pexels-photo-3800060.jpeg',
+                'https://images.pexels.com/photos/4481326/pexels-photo-4481326.jpeg',
+                'https://images.pexels.com/photos/3995913/pexels-photo-3995913.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => true,
+            'location_line1' => 'Parque Industrial El Marqués',
+            'location_line2' => 'Carretera 57, Km 196',
+            'location_line3' => 'Querétaro, CP 76246',
+            'google_maps_url' => 'https://www.google.com/maps?q=20.7160732,-100.4486038',
+            'feature1' => 'Nave industrial de 2,500m²',
+            'feature2' => 'Altura libre de 12m',
+            'feature3' => '5 andenes de carga',
+            'feature4' => 'Oficinas en 2 niveles de 300m²',
+            'feature5' => 'Subestación eléctrica de 500 KVA',
+            'feature6' => 'Sistema contra incendios',
+            'feature7' => 'Patio de maniobras para tráilers',
+            'feature8' => 'Certificación LEED Silver',
+            'investment' => 18500000.00,
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a mountain cabin property example.
+     */
+    protected function createMountainCabin(): void
+    {
+        $images = $this->fetchImagesFromPexels('mountain cabin wood', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/803975/pexels-photo-803975.jpeg',
+                'https://images.pexels.com/photos/147411/pexels-photo-147411.jpeg',
+                'https://images.pexels.com/photos/1497232/pexels-photo-1497232.jpeg',
+                'https://images.pexels.com/photos/731082/pexels-photo-731082.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => false, // For rent
+            'location_line1' => 'Bosques de Monterreal',
+            'location_line2' => 'Km 3 Camino a las Cabañas',
+            'location_line3' => 'Arteaga, Coahuila, CP 25350',
+            'google_maps_url' => 'https://www.google.com/maps?q=25.3518141,-100.6040954',
+            'feature1' => 'Cabaña de madera de 120m²',
+            'feature2' => '3 Recámaras con vista al bosque',
+            'feature3' => '2 Baños completos',
+            'feature4' => 'Chimenea de leña',
+            'feature5' => 'Cocina equipada',
+            'feature6' => 'Terraza con asador',
+            'feature7' => 'Estacionamiento para 2 autos',
+            'feature8' => 'A 5 min de pistas de esquí',
+            'investment' => 3500.00, // Daily rate
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a beach condo property example.
+     */
+    protected function createBeachCondo(): void
+    {
+        $images = $this->fetchImagesFromPexels('beach condo apartment', 4);
+
+        if (empty($images)) {
+            $images = [
+                'https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg',
+                'https://images.pexels.com/photos/1428348/pexels-photo-1428348.jpeg',
+                'https://images.pexels.com/photos/3356416/pexels-photo-3356416.jpeg',
+                'https://images.pexels.com/photos/2988860/pexels-photo-2988860.jpeg',
+            ];
+        }
+
+        Property::create([
+            'is_for_sale' => true,
+            'location_line1' => 'Torre Oceana, Departamento 802',
+            'location_line2' => 'Blvd. Miguel de la Madrid',
+            'location_line3' => 'Manzanillo, Colima, CP 28218',
+            'google_maps_url' => 'https://www.google.com/maps?q=19.1172862,-104.3494985',
+            'feature1' => 'Condominio frente al mar de 150m²',
+            'feature2' => '3 Recámaras, 2 con vista al mar',
+            'feature3' => '3 Baños completos',
+            'feature4' => 'Cocina equipada con isla',
+            'feature5' => 'Sala-comedor con balcón panorámico',
+            'feature6' => '2 Cajones de estacionamiento',
+            'feature7' => 'Alberca, spa y gimnasio',
+            'feature8' => 'Control de acceso y seguridad 24/7',
+            'investment' => 6800000.00,
+            'image1' => $images[0] ?? null,
+            'image2' => $images[1] ?? null,
+            'image3' => $images[2] ?? null,
+            'image4' => $images[3] ?? null,
+        ]);
+    }
+
+    /**
+     * Create a student studio property example.
+     */
+    protected function createStudentStudio(): void
+    {
+        // $images = $this->fetchImagesFromPexels('small studio apartment', 4);
+
+        // if (empty($images)) {
+        //     $images = [
+        //         'https://images.pexels.com/photos/439227/pexels-photo-439227.jpeg',
+        //         'https://images.pexels.com/photos/1082355/pexels-photo-1082355.jpeg',
+        //         'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg',
+        //         'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg',
+        //     ];
+        // }
+
+        // Property::create([
+        //     'is_for_sale' => false, // For rent
+        //     'location_line1' => 'Calle Río Consulado 234',
+        //     'location_line2' => 'Col. San Lorenzo',
+        //     'location_line3' => 'Puebla, Puebla, CP 72410',
+        //     'google_maps_url' => 'https://www.google.com/maps?q=19.0521994,-98.2046584',
+        //     'feature1' => 'Estudio amueblado de 35m²',
+        //     'feature2' => 'Cama matrimonial',
+        //     'feature3' => 'Kitchenette equipada',
+        //     'feature4' => 'Baño completo',
+        //     'feature5' => 'Internet de alta velocidad incluido',
+        //     'feature6' => 'Área de estudio',
+        //     'feature7' => 'A 5 minutos caminando de BUAP',
+        //     'feature8' => 'Servicios incluidos en la renta',
+        //     'investment' => 6000.00, // Monthly rent
+        //     'image1' => $images[0] ?? null,
+        //     'image2' => $images[1] ?? null,
+        //     'image3' => $images[2] ?? null,
+        //     'image4' => $images[3] ?? null,
+        // ]);
     }
 }
