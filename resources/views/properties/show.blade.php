@@ -1,35 +1,45 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Propiedad
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('properties.edit', $property) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    Editar
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center md:text-left">
+            Propiedad
+        </h2>
+    </x-slot>
+
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
+        <div>
+            <h1 class="text-2xl font-bold mb-6 text-center">{{ $property->location_line1 }}</h1>
+            
+            <!-- Botones de acción -->
+            <div class="flex flex-wrap gap-3 mb-6">
+                <a href="{{ route('properties.edit', $property) }}" class="inline-flex items-center px-4 py-3 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    EDITAR
+                </a>
+                <a href="{{ $property->google_maps_url ?? '#' }}" target="_blank" class="inline-flex items-center px-4 py-3 bg-orange-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-orange-800 focus:bg-orange-800 active:bg-orange-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="{{ !$property->google_maps_url ? 'alert(\'No hay URL de ubicación disponible para esta propiedad.\'); return false;' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    ABRIR UBICACIÓN
                 </a>
                 <form action="{{ route('properties.destroy', $property) }}" method="POST" class="inline-block">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150 mx-2" onclick="return confirm('¿Estás seguro de eliminar esta propiedad?')">
-                        Eliminar
+                    <button type="submit" class="inline-flex items-center px-4 py-3 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150" onclick="return confirm('¿Estás seguro de eliminar esta propiedad?')">
+                        ELIMINAR
                     </button>
                 </form>
-                <a href="{{ route('properties.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    Volver
+                <a href="{{ route('properties.index') }}" class="inline-flex items-center px-4 py-3 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    VOLVER
                 </a>
             </div>
         </div>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900">
-                    <!-- Imágenes -->
-                    <div class="mb-6">
-                        <div class="grid grid-cols-1 gap-4">
-                            @if($property->image1)
+        
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="p-6 text-gray-900">
+                <!-- Imágenes -->
+                <div class="mb-6">
+                    <div class="grid grid-cols-1 gap-4">
+                        @if($property->image1)
                                 <div class="relative aspect-video overflow-hidden rounded-lg bg-gray-100">
                                     <img id="main-image" src="{{ asset('storage/' . $property->image1) }}" 
                                         alt="Imagen principal" 
