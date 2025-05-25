@@ -214,6 +214,9 @@
                               file:bg-indigo-50 file:text-indigo-700
                               hover:file:bg-indigo-100" accept="image/*">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
+                            <div id="preview-image1" class="mt-2 hidden">
+                                <img id="img-preview-1" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 1">
+                            </div>
                             <x-input-error :messages="$errors->get('image1')" class="mt-2" />
                         </div>
 
@@ -226,6 +229,9 @@
                               file:bg-indigo-50 file:text-indigo-700
                               hover:file:bg-indigo-100" accept="image/*">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
+                            <div id="preview-image2" class="mt-2 hidden">
+                                <img id="img-preview-2" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 2">
+                            </div>
                             <x-input-error :messages="$errors->get('image2')" class="mt-2" />
                         </div>
 
@@ -238,6 +244,9 @@
                               file:bg-indigo-50 file:text-indigo-700
                               hover:file:bg-indigo-100" accept="image/*">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
+                            <div id="preview-image3" class="mt-2 hidden">
+                                <img id="img-preview-3" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 3">
+                            </div>
                             <x-input-error :messages="$errors->get('image3')" class="mt-2" />
                         </div>
 
@@ -250,6 +259,9 @@
                               file:bg-indigo-50 file:text-indigo-700
                               hover:file:bg-indigo-100" accept="image/*">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
+                            <div id="preview-image4" class="mt-2 hidden">
+                                <img id="img-preview-4" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 4">
+                            </div>
                             <x-input-error :messages="$errors->get('image4')" class="mt-2" />
                         </div>
                         
@@ -477,6 +489,53 @@
                 document.getElementById('datasheet').dispatchEvent(event);
             }
         }
+        
+        // Funcionalidad de previsualización para imágenes individuales
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing image previews...');
+            
+            function setupImagePreview(inputId, previewId, imgId) {
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+                const img = document.getElementById(imgId);
+                
+                console.log('Setting up preview for:', inputId, input, preview, img);
+                
+                if (input && preview && img) {
+                    input.addEventListener('change', function(event) {
+                        console.log('File changed for:', inputId);
+                        const file = event.target.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                            console.log('Valid image file selected:', file.name, file.type);
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                console.log('File read successful for:', inputId);
+                                img.src = e.target.result;
+                                preview.classList.remove('hidden');
+                            };
+                            reader.onerror = function() {
+                                console.error('Error reading file for:', inputId);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            console.log('No valid image file selected for:', inputId);
+                            img.src = '';
+                            preview.classList.add('hidden');
+                        }
+                    });
+                } else {
+                    console.error('Missing elements for:', inputId, {input, preview, img});
+                }
+            }
+            
+            // Configurar previsualización para cada imagen
+            setupImagePreview('image1', 'preview-image1', 'img-preview-1');
+            setupImagePreview('image2', 'preview-image2', 'img-preview-2');
+            setupImagePreview('image3', 'preview-image3', 'img-preview-3');
+            setupImagePreview('image4', 'preview-image4', 'img-preview-4');
+            
+            console.log('Image preview setup completed');
+        });
         
     </script>
 </x-app-layout>
