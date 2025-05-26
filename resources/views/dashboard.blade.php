@@ -33,12 +33,12 @@
                         <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Gestión de Blog') }}</h3>
                         
                         <div class="space-y-2">
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="{{ route('articles.index') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Administrar Entradas') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Ver, crear, editar y eliminar entradas del blog</div>
                             </a>
                             
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="{{ route('articles.create') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Nueva Entrada') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Crear una nueva entrada para el blog</div>
                             </a>
@@ -52,12 +52,12 @@
                         <h3 class="text-lg font-medium text-gray-800 mb-4">{{ __('Enlaces Rápidos') }}</h3>
                         
                         <div class="space-y-2">
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="{{ route('profile.edit') }}" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Mi Perfil') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Gestionar información de la cuenta</div>
                             </a>
                             
-                            <a href="#" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
+                            <a href="/" target="_blank" class="block p-4 border border-gray-200 rounded hover:bg-gray-50 transition duration-200">
                                 <div class="font-medium">{{ __('Ver Sitio Público') }}</div>
                                 <div class="text-sm text-gray-500 mt-1">Visualizar el sitio como lo ven los usuarios</div>
                             </a>

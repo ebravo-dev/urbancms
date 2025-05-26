@@ -22,8 +22,18 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('asdqwe123'),
             'email_verified_at' => now(),
         ]);
-        
+
+        User::factory()->create([
+            'name' => 'Brizuela',
+            'email' => 'brizuela@brizuela.com',
+            'password' => Hash::make('asdqwe123'),
+            'email_verified_at' => now(),
+        ]);
+
         // Seed example properties
         $this->call(PropertySeeder::class);
+
+        // Seed example blog articles
+        $this->call(ArticleSeeder::class);
     }
 }
