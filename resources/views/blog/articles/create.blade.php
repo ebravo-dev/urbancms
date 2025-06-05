@@ -7,7 +7,17 @@
 
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden bg-white shad        // Función para actualizar el contenido de un bloque
+        function updateBlockContent(blockId, content) {
+            const block = contentBlocks.find(b => b.id === blockId);
+            if (block) {
+                block.content = content;
+                // Actualizar vista previa automáticamente
+                updatePreview();
+                // Generar JSON automáticamente
+                prepareContentJSON();
+            }
+        }:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -24,6 +34,14 @@
                             <label for="publication_date" class="block text-sm font-medium text-gray-700">Fecha de Publicación</label>
                             <input type="datetime-local" name="publication_date" id="publication_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="{{ old('publication_date', now()->format('Y-m-d\TH:i')) }}">
                             @error('publication_date')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                            <textarea name="description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Breve descripción del artículo">{{ old('description') }}</textarea>
+                            @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -188,7 +206,31 @@
             
             // Inicializar evento para guardar formulario
             document.querySelector('form').addEventListener('submit', function(e) {
-                prepareContentJSON();
+                // Preparar el JSON del contenido
+                const hasValidContent = prepareContentJSON();
+                
+                // Verificar que el contenido se haya generado correctamente
+                const contentValue = document.getElementById('content-json').value;
+                if (!contentValue || contentValue === '[]' || contentValue === '') {
+                    e.preventDefault();
+                    alert('Error interno: No se pudo generar el contenido. Por favor, intenta recargar la página.');
+                    return false;
+                }
+                
+                // Verificar que el JSON sea válido
+                try {
+                    const parsed = JSON.parse(contentValue);
+                    if (!Array.isArray(parsed) || parsed.length === 0) {
+                        e.preventDefault();
+                        alert('Error interno: Contenido inválido. Por favor, intenta recargar la página.');
+                        return false;
+                    }
+                } catch (error) {
+                    e.preventDefault();
+                    alert('Error interno: Formato de contenido inválido. Por favor, intenta recargar la página.');
+                    console.error('Error parsing content JSON:', error);
+                    return false;
+                }
             });
         });
         
@@ -203,7 +245,10 @@
                 addBlock('paragraph');
             }
             
+            renderBlocks();
             updatePreview();
+            // Generar el JSON inicial
+            prepareContentJSON();
         }
         
         // Añadir un nuevo bloque al editor
@@ -388,6 +433,9 @@
                 inputField.dataset.blockId = block.id;
                 inputField.addEventListener('input', function() {
                     updateBlockContent(this.dataset.blockId, this.value);
+                    // Actualizar JSON en tiempo real
+                    prepareContentJSON();
+                    updatePreview();
                 });
                 
                 // Botón para añadir bloque después de este
@@ -517,15 +565,57 @@
         
         // Preparar el JSON de contenido para enviar al servidor
         function prepareContentJSON() {
-            // Crear una copia limpia de los bloques sin las propiedades internas
-            const cleanBlocks = contentBlocks.map(block => ({
-                type: block.type,
-                content: block.content
-            }));
+            // Primero, recopilar el contenido actual de todos los inputs del editor
+            const currentInputs = document.querySelectorAll('#blocks-container input, #blocks-container textarea');
+            currentInputs.forEach(input => {
+                const blockId = input.dataset.blockId;
+                if (blockId) {
+                    updateBlockContent(blockId, input.value);
+                }
+            });
+            
+            // Si no hay bloques, crear uno por defecto
+            if (contentBlocks.length === 0) {
+                contentBlocks.push({
+                    id: 'block-' + blockCounter++,
+                    type: 'paragraph',
+                    content: 'Escribe aquí tu contenido...'
+                });
+            }
+            
+            // Crear bloques válidos - ser más permisivo con el contenido
+            let validBlocks = contentBlocks.map(block => {
+                let content = block.content.trim();
+                
+                // Si el contenido está vacío o es solo espacios, usar un contenido mínimo
+                if (!content || content.length === 0) {
+                    content = 'Contenido del artículo';
+                }
+                
+                return {
+                    type: block.type,
+                    content: content
+                };
+            });
+            
+            // Asegurar que siempre hay al menos un bloque
+            if (validBlocks.length === 0) {
+                validBlocks.push({
+                    type: 'paragraph',
+                    content: 'Contenido del artículo'
+                });
+            }
             
             // Convertir a JSON y guardar en el campo oculto
-            const json = JSON.stringify(cleanBlocks);
+            const json = JSON.stringify(validBlocks);
             document.getElementById('content-json').value = json;
+            
+            // Debug: mostrar en consola lo que se está enviando
+            console.log('Bloques disponibles:', contentBlocks);
+            console.log('Bloques válidos:', validBlocks);
+            console.log('Contenido a enviar:', json);
+            
+            return validBlocks.length > 0;
         }
         
         function updateSeoPreview() {

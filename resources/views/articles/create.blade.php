@@ -26,6 +26,45 @@
                         </div>
 
                         <div>
+                            <x-input-label for="content" :value="__('Contenido del Artículo')" />
+                            <textarea id="content" name="content_text" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="12" required placeholder="Escribe el contenido de tu artículo aquí...">{{ old('content_text') }}</textarea>
+                            <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                            <input type="hidden" name="content" id="content-json">
+                        </div>
+
+                        <div>
+                            <x-input-label for="publication_date" :value="__('Fecha de Publicación')" />
+                            <input type="datetime-local" id="publication_date" name="publication_date" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value="{{ old('publication_date', now()->format('Y-m-d\TH:i')) }}" />
+                            <x-input-error :messages="$errors->get('publication_date')" class="mt-2" />
+                        </div>
+
+                        <!-- Campos SEO opcionales -->
+                        <div class="space-y-4 border-t border-gray-200 pt-6">
+                            <h3 class="text-lg font-medium text-gray-900">Configuración SEO (Opcional)</h3>
+                            
+                            <div>
+                                <x-input-label for="meta_title" :value="__('Meta Título')" />
+                                <input type="text" id="meta_title" name="meta_title" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" maxlength="70" value="{{ old('meta_title') }}" placeholder="Si se deja vacío, se usará el título del artículo" />
+                                <x-input-error :messages="$errors->get('meta_title')" class="mt-2" />
+                                <p class="text-sm text-gray-500 mt-1">Máximo 70 caracteres recomendados</p>
+                            </div>
+
+                            <div>
+                                <x-input-label for="meta_description" :value="__('Meta Descripción')" />
+                                <textarea id="meta_description" name="meta_description" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" maxlength="160" placeholder="Descripción breve para motores de búsqueda">{{ old('meta_description') }}</textarea>
+                                <x-input-error :messages="$errors->get('meta_description')" class="mt-2" />
+                                <p class="text-sm text-gray-500 mt-1">Máximo 160 caracteres recomendados</p>
+                            </div>
+
+                            <div>
+                                <x-input-label for="keywords" :value="__('Palabras Clave')" />
+                                <input type="text" id="keywords" name="keywords" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value="{{ old('keywords') }}" placeholder="inmobiliaria, casas, venta, separadas por comas" />
+                                <x-input-error :messages="$errors->get('keywords')" class="mt-2" />
+                                <p class="text-sm text-gray-500 mt-1">Palabras clave separadas por comas</p>
+                            </div>
+                        </div>
+
+                        <div>
                             <x-input-label for="images" :value="__('Imágenes')" />
                             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                 <div class="space-y-1 text-center">
@@ -83,6 +122,28 @@
     </div>
 
     <script>
+        // Convertir el contenido de texto a formato JSON antes de enviar el formulario
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const contentText = document.getElementById('content').value.trim();
+            
+            if (!contentText) {
+                e.preventDefault();
+                alert('Por favor, escribe el contenido del artículo.');
+                return false;
+            }
+            
+            // Convertir el texto a formato JSON de bloques
+            const contentBlocks = [
+                {
+                    id: 'content-block-1',
+                    type: 'paragraph',
+                    content: contentText
+                }
+            ];
+            
+            document.getElementById('content-json').value = JSON.stringify(contentBlocks);
+        });
+
         // Preview images before upload
         document.getElementById('images').addEventListener('change', function(event) {
             const preview = document.getElementById('image-preview');

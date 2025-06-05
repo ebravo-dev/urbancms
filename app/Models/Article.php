@@ -12,9 +12,11 @@ class Article extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'publication_date',
         'content',
         'slug',
+        'datasheet_path',
         'meta_title',
         'meta_description',
         'keywords',

@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\ArticleImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -32,11 +33,17 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug: Ver qué se está recibiendo
+        Log::info('Datos recibidos en ArticleController: ' . json_encode($request->all()));
+        Log::info('Campo content recibido: ' . $request->input('content'));
+
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'publication_date' => 'nullable|date',
-            'content' => 'required|json', // Cambiar string a json para validar formato
+            'content' => 'required|string', // Cambiar de json a string para mayor flexibilidad
             'images.*' => 'nullable|image|max:2048',
+            'datasheet' => 'nullable|file|max:2048|mimes:pdf,doc,docx,jpg,jpeg,png',
             'meta_title' => 'nullable|string|max:70', // Recomendación SEO para meta título
             'meta_description' => 'nullable|string|max:160', // Recomendación SEO para meta descripción
             'keywords' => 'nullable|string|max:255',
@@ -45,6 +52,7 @@ class ArticleController extends Controller
         // Decodificar y validar estructura del JSON de contenido
         $contentData = json_decode($request->content, true);
         if (!is_array($contentData)) {
+            Log::error('Error decodificando JSON: ' . $request->content);
             return back()->withErrors(['content' => 'El formato del contenido es inválido.']);
         }
 
@@ -60,9 +68,11 @@ class ArticleController extends Controller
 
         $article = Article::create([
             'title' => $request->title,
+            'description' => $request->description,
             'slug' => Str::slug($request->title),
             'publication_date' => $request->publication_date ?? now(),
             'content' => $contentData, // Guardar como array ya validado
+            'datasheet_path' => $request->hasFile('datasheet') ? $request->file('datasheet')->store('datasheets', 'public') : null,
             'meta_title' => $request->meta_title ?? $request->title,
             'meta_description' => $request->meta_description,
             'keywords' => $request->keywords,
