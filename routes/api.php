@@ -35,7 +35,7 @@ Route::middleware([
     */
 
     // Public API Endpoints (Comment these out if using API token security)
-    
+
     // Properties API
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/properties/{property}', [PropertyController::class, 'show']);

@@ -23,8 +23,8 @@ class ArticleController extends Controller
             $searchTerm = $request->search;
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'like', "%{$searchTerm}%")
-                  ->orWhere('description', 'like', "%{$searchTerm}%")
-                  ->orWhere('keywords', 'like', "%{$searchTerm}%");
+                    ->orWhere('description', 'like', "%{$searchTerm}%")
+                    ->orWhere('keywords', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -92,13 +92,13 @@ class ArticleController extends Controller
     public function featured(Request $request): JsonResponse
     {
         $limit = min($request->get('limit', 5), 10); // Max 10 featured articles
-        
+
         $articles = Article::with(['images' => function ($query) {
             $query->orderBy('display_order', 'asc');
         }])
-        ->orderBy('publication_date', 'desc')
-        ->limit($limit)
-        ->get();
+            ->orderBy('publication_date', 'desc')
+            ->limit($limit)
+            ->get();
 
         $formattedArticles = $articles->map(function ($article) {
             return $this->formatArticle($article, false);
@@ -116,39 +116,39 @@ class ArticleController extends Controller
     public function related(Article $article, Request $request): JsonResponse
     {
         $limit = min($request->get('limit', 3), 5); // Max 5 related articles
-        
+
         $relatedArticles = collect();
-        
+
         if ($article->keywords) {
             $keywords = explode(',', $article->keywords);
             $keywords = array_map('trim', $keywords);
-            
+
             $query = Article::with(['images' => function ($query) {
                 $query->orderBy('display_order', 'asc');
             }])
-            ->where('id', '!=', $article->id)
-            ->orderBy('publication_date', 'desc');
-            
+                ->where('id', '!=', $article->id)
+                ->orderBy('publication_date', 'desc');
+
             // Search for articles with similar keywords
             foreach ($keywords as $keyword) {
                 $query->orWhere('keywords', 'like', "%{$keyword}%");
             }
-            
+
             $relatedArticles = $query->limit($limit)->get();
         }
-        
+
         // If we don't have enough related articles, fill with latest ones
         if ($relatedArticles->count() < $limit) {
             $remaining = $limit - $relatedArticles->count();
             $latestArticles = Article::with(['images' => function ($query) {
                 $query->orderBy('display_order', 'asc');
             }])
-            ->where('id', '!=', $article->id)
-            ->whereNotIn('id', $relatedArticles->pluck('id'))
-            ->orderBy('publication_date', 'desc')
-            ->limit($remaining)
-            ->get();
-            
+                ->where('id', '!=', $article->id)
+                ->whereNotIn('id', $relatedArticles->pluck('id'))
+                ->orderBy('publication_date', 'desc')
+                ->limit($remaining)
+                ->get();
+
             $relatedArticles = $relatedArticles->merge($latestArticles);
         }
 
@@ -184,7 +184,7 @@ class ArticleController extends Controller
                     'display_order' => $image->display_order
                 ];
             }),
-            'featured_image' => $article->images->first() ? 
+            'featured_image' => $article->images->first() ?
                 asset('storage/' . $article->images->first()->image_path) : null,
             'created_at' => $article->created_at->toISOString(),
             'updated_at' => $article->updated_at->toISOString(),
@@ -194,7 +194,7 @@ class ArticleController extends Controller
         if ($includeFullContent) {
             $formattedArticle['content'] = $article->content;
             $formattedArticle['content_html'] = $this->renderContentAsHtml($article->content);
-            
+
             // Include comments if available
             if ($article->comments) {
                 $formattedArticle['comments'] = $article->comments->map(function ($comment) {
@@ -229,7 +229,7 @@ class ArticleController extends Controller
             if ($block['type'] === 'paragraph' && $wordCount < $maxWords) {
                 $blockWords = explode(' ', $block['content']);
                 $remainingWords = $maxWords - $wordCount;
-                
+
                 if (count($blockWords) <= $remainingWords) {
                     $preview .= $block['content'] . ' ';
                     $wordCount += count($blockWords);
