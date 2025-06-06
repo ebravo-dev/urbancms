@@ -163,6 +163,38 @@ class ArticleController extends Controller
     }
 
     /**
+     * Store a new comment for the specified article.
+     */
+    public function storeComment(Request $request, Article $article): JsonResponse
+    {
+        $validated = $request->validate([
+            'author_name' => 'required|string|max:255',
+            'author_email' => 'required|email|max:255',
+            'content' => 'required|string|max:5000',
+        ]);
+
+        $comment = $article->comments()->create([
+            'name' => $validated['author_name'],
+            'email' => $validated['author_email'],
+            'message' => $validated['content'],
+            'is_approved' => true, // Auto-approve for now, you can add moderation later
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment created successfully',
+            'data' => [
+                'id' => $comment->id,
+                'author_name' => $comment->name,
+                'author_email' => $comment->email,
+                'content' => $comment->message,
+                'created_at' => $comment->created_at->toISOString(),
+                'created_at_formatted' => $comment->created_at->format('d M Y H:i')
+            ]
+        ], 201);
+    }
+
+    /**
      * Format article data for API response.
      */
     private function formatArticle(Article $article, bool $includeFullContent = false): array
@@ -200,9 +232,9 @@ class ArticleController extends Controller
                 $formattedArticle['comments'] = $article->comments->map(function ($comment) {
                     return [
                         'id' => $comment->id,
-                        'author_name' => $comment->author_name,
-                        'author_email' => $comment->author_email,
-                        'content' => $comment->content,
+                        'author_name' => $comment->name,
+                        'author_email' => $comment->email,
+                        'content' => $comment->message,
                         'created_at' => $comment->created_at->toISOString(),
                         'created_at_formatted' => $comment->created_at->format('d M Y H:i')
                     ];

@@ -204,6 +204,76 @@ GET /api/articles/1/related?limit=3
 }
 ```
 
+## Comments Endpoints
+
+### 5. Create Comment
+**POST** `/articles/{id_or_slug}/comments`
+
+Create a new comment for a specific article.
+
+**Request Body:**
+```json
+{
+  "author_name": "Juan Pérez",
+  "author_email": "juan@example.com",
+  "content": "Excelente artículo sobre propiedades en esta zona."
+}
+```
+
+**Validation Rules:**
+- `author_name` (required, string, max: 255 characters)
+- `author_email` (required, valid email, max: 255 characters)
+- `content` (required, string, max: 5000 characters)
+
+**Example Request:**
+```bash
+POST /api/articles/1/comments
+Content-Type: application/json
+
+{
+  "author_name": "Juan Pérez",
+  "author_email": "juan@example.com",
+  "content": "Excelente artículo sobre propiedades en esta zona. Muy útil para los que estamos buscando nuestra primera casa."
+}
+```
+
+**Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "message": "Comment created successfully",
+  "data": {
+    "id": 15,
+    "author_name": "Juan Pérez",
+    "author_email": "juan@example.com",
+    "content": "Excelente artículo sobre propiedades en esta zona. Muy útil para los que estamos buscando nuestra primera casa.",
+    "created_at": "2025-06-05T14:30:00Z",
+    "created_at_formatted": "05 Jun 2025 14:30"
+  }
+}
+```
+
+**Error Response (422 Validation Error):**
+```json
+{
+  "success": false,
+  "message": "The given data was invalid.",
+  "errors": {
+    "author_name": ["The author name field is required."],
+    "author_email": ["The author email field must be a valid email address."],
+    "content": ["The content field is required."]
+  }
+}
+```
+
+**Error Response (404 Article Not Found):**
+```json
+{
+  "success": false,
+  "message": "Article not found"
+}
+```
+
 ## Content Block Types
 
 The `content` field in articles contains an array of blocks with the following types:
