@@ -45,6 +45,9 @@ Route::middleware([
     Route::get('/articles/featured', [ArticleController::class, 'featured']);
     Route::get('/articles/{article}', [ArticleController::class, 'show']);
     Route::get('/articles/{article}/related', [ArticleController::class, 'related']);
+    
+    // Comments API
+    Route::post('/articles/{article}/comments', [ArticleController::class, 'storeComment']);
 
     // Test endpoint to check API connectivity
     Route::get('/ping', function () {
