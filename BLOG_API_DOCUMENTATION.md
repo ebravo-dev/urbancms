@@ -239,3 +239,123 @@ All API endpoints are rate limited. Check the response headers for rate limit in
 - `X-RateLimit-Limit` - Maximum requests per period
 - `X-RateLimit-Remaining` - Remaining requests in current period
 - `X-RateLimit-Reset` - Unix timestamp when the rate limit resets
+
+## Comments Endpoints
+
+### 1. Get Comments for an Article
+**GET** `/articles/{article}/comments`
+
+Returns all approved comments for a specific article.
+
+**Example Request:**
+```bash
+GET /api/articles/1/comments
+```
+
+**Example Response:**
+```json
+{
+  "success": true,
+  "message": "Comentarios obtenidos exitosamente",
+  "data": [
+    {
+      "id": 1,
+      "name": "Juan Pérez",
+      "message": "Excelente artículo, muy útil para entender el mercado inmobiliario.",
+      "created_at": "2025-07-04T15:30:00Z",
+      "created_at_formatted": "04 Jul 2025 15:30"
+    },
+    {
+      "id": 2,
+      "name": "María García", 
+      "message": "Información muy valiosa, gracias por compartir.",
+      "created_at": "2025-07-04T14:20:00Z",
+      "created_at_formatted": "04 Jul 2025 14:20"
+    }
+  ],
+  "total": 2
+}
+```
+
+### 2. Create a New Comment
+**POST** `/articles/{article}/comments`
+
+Creates a new comment for the specified article.
+
+**Request Body:**
+```json
+{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "message": "Excelente artículo, muy útil para entender el mercado inmobiliario."
+}
+```
+
+**Validation Rules:**
+- `name`: Required, string, max 255 characters
+- `email`: Required, valid email format, max 255 characters  
+- `message`: Required, string, max 1000 characters
+
+**Example Request:**
+```bash
+curl -X POST http://your-domain.com/api/articles/1/comments \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "name": "Juan Pérez",
+    "email": "juan@example.com",
+    "message": "Excelente artículo, muy útil para entender el mercado inmobiliario."
+  }'
+```
+
+**Success Response (201):**
+```json
+{
+  "success": true,
+  "message": "Comentario agregado exitosamente",
+  "data": {
+    "id": 15,
+    "name": "Juan Pérez",
+    "message": "Excelente artículo, muy útil para entender el mercado inmobiliario.",
+    "created_at": "2025-07-04T15:30:00Z",
+    "created_at_formatted": "04 Jul 2025 15:30"
+  }
+}
+```
+
+**Validation Error Response (422):**
+```json
+{
+  "success": false,
+  "message": "Datos de validación incorrectos",
+  "errors": {
+    "email": ["El campo email debe ser una dirección de correo válida."],
+    "message": ["El campo message es obligatorio."]
+  }
+}
+```
+
+### 3. Get a Specific Comment
+**GET** `/articles/{article}/comments/{comment}`
+
+Returns details of a specific comment for an article.
+
+**Example Request:**
+```bash
+GET /api/articles/1/comments/15
+```
+
+**Example Response:**
+```json
+{
+  "success": true,
+  "message": "Comentario obtenido exitosamente",
+  "data": {
+    "id": 15,
+    "name": "Juan Pérez",
+    "message": "Excelente artículo, muy útil para entender el mercado inmobiliario.",
+    "created_at": "2025-07-04T15:30:00Z",
+    "created_at_formatted": "04 Jul 2025 15:30"
+  }
+}
+```

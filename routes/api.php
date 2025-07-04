@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,11 @@ Route::middleware([
     Route::get('/articles/featured', [ArticleController::class, 'featured']);
     Route::get('/articles/{article}', [ArticleController::class, 'show']);
     Route::get('/articles/{article}/related', [ArticleController::class, 'related']);
+
+    // Comments API
+    Route::get('/articles/{article}/comments', [CommentController::class, 'index']);
+    Route::post('/articles/{article}/comments', [CommentController::class, 'store']);
+    Route::get('/articles/{article}/comments/{comment}', [CommentController::class, 'show']);
 
     // Test endpoint to check API connectivity
     Route::get('/ping', function () {
