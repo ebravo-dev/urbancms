@@ -93,15 +93,6 @@
                                 @foreach($article->images as $image)
                                 <div class="relative border p-2 rounded" data-id="{{ $image->id }}">
                                     <img src="{{ asset('storage/' . $image->image_path) }}" alt="Imagen del artículo" class="h-40 w-full object-cover">
-                                    <form action="{{ route('article-images.destroy', $image) }}" method="POST" class="absolute top-2 right-2">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-600 text-white p-1 rounded hover:bg-red-700">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </form>
                                 </div>
                                 @endforeach
                             </div>
@@ -177,7 +168,7 @@
                             <a href="{{ route('articles.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
                                 Cancelar
                             </a>
-                            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700" onclick="prepareContentJSON(); updateImageOrder();">
                                 Actualizar Artículo
                             </button>
                         </div>
@@ -215,12 +206,25 @@
             updateCharCount('meta_description', 'meta_description_count', 160);
             
             // Inicializar evento para guardar formulario
-            document.querySelector('form').addEventListener('submit', function(e) {
-                prepareContentJSON();
-            });
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Evento submit disparado...'); // Debug
+                    
+                    // Preparar contenido JSON
+                    prepareContentJSON();
+                    
+                    // Actualizar orden de imágenes una vez más antes del envío
+                    updateImageOrder();
+                    
+                    console.log('Formulario listo para enviar');
+                });
+            }
             
             // Initialize sortable for image reordering
             if (document.getElementById('images-container')) {
+                updateImageOrderField(); // Llamar a la función inicial
+                
                 const sortable = new Sortable(document.getElementById('images-container'), {
                     animation: 150,
                     ghostClass: 'bg-gray-100',
@@ -228,18 +232,21 @@
                         updateImageOrder();
                     }
                 });
-                
-                updateImageOrder();
             }
         });
         
         // Función para actualizar el orden de las imágenes
-        function updateImageOrder() {
-            if (!document.getElementById('images-container')) return;
+        function updateImageOrderField() {
+            const container = document.getElementById('images-container');
+            if (!container) return;
             
             const imageContainers = document.querySelectorAll('#images-container > div');
             const imageIds = Array.from(imageContainers).map(container => container.dataset.id);
-            document.getElementById('image-order').value = JSON.stringify(imageIds);
+            const orderField = document.getElementById('image-order');
+            if (orderField) {
+                orderField.value = imageIds.join(','); // Cambiar a join(',') para consistencia
+                console.log('Orden inicial de imágenes:', imageIds.join(',')); // Debug
+            }
         }
         
         // Inicializar editor de bloques
@@ -579,6 +586,8 @@
         
         // Preparar el JSON de contenido para enviar al servidor
         function prepareContentJSON() {
+            console.log('Preparando JSON...', contentBlocks); // Debug
+            
             // Crear una copia limpia de los bloques sin las propiedades internas
             const cleanBlocks = contentBlocks.map(block => ({
                 type: block.type,
@@ -587,7 +596,16 @@
             
             // Convertir a JSON y guardar en el campo oculto
             const json = JSON.stringify(cleanBlocks);
-            document.getElementById('content-json').value = json;
+            const contentField = document.getElementById('content-json');
+            
+            if (contentField) {
+                contentField.value = json;
+                console.log('JSON guardado en campo:', json); // Debug
+                return true;
+            } else {
+                console.error('Campo content-json no encontrado');
+                return false;
+            }
         }
         
         function updateSeoPreview() {
@@ -679,22 +697,24 @@
         
         function updateImageOrder() {
             const container = document.getElementById('images-container');
-            if (!container) return;
+            if (!container) {
+                console.log('No hay container de imágenes'); // Debug
+                return;
+            }
             
             const images = container.querySelectorAll('[data-id]');
             const order = Array.from(images).map(img => img.dataset.id);
             
-            document.getElementById('image-order').value = order.join(',');
-            
-            // Send order to backend
-            fetch('{{ route("articles.reorder-images", $article) }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ images: order })
-            });
+            // Solo actualizar el campo hidden, sin hacer petición AJAX
+            const orderField = document.getElementById('image-order');
+            if (orderField) {
+                orderField.value = order.join(',');
+                console.log('Orden de imágenes actualizado:', order.join(',')); // Debug
+                return true;
+            } else {
+                console.log('No se encontró campo image-order'); // Debug
+                return false;
+            }
         }
         
         // Función para mostrar vista previa de las nuevas imágenes seleccionadas
