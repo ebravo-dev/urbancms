@@ -125,9 +125,8 @@ GET /api/articles/guia-completa-para-comprar-tu-primera-casa
     "comments": [
       {
         "id": 1,
-        "author_name": "Juan Pérez",
-        "author_email": "juan@example.com",
-        "content": "Excelente artículo, muy útil",
+        "name": "Juan Pérez",
+        "message": "Excelente artículo, muy útil",
         "created_at": "2025-06-05T12:00:00Z",
         "created_at_formatted": "05 Jun 2025 12:00"
       }

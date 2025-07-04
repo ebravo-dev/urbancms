@@ -76,7 +76,8 @@ class ArticleController extends Controller
                 $query->orderBy('display_order', 'asc');
             },
             'comments' => function ($query) {
-                $query->orderBy('created_at', 'desc');
+                $query->where('is_approved', true)
+                      ->orderBy('created_at', 'desc');
             }
         ]);
 
@@ -197,16 +198,17 @@ class ArticleController extends Controller
 
             // Include comments if available
             if ($article->comments) {
-                $formattedArticle['comments'] = $article->comments->map(function ($comment) {
-                    return [
-                        'id' => $comment->id,
-                        'author_name' => $comment->author_name,
-                        'author_email' => $comment->author_email,
-                        'content' => $comment->content,
-                        'created_at' => $comment->created_at->toISOString(),
-                        'created_at_formatted' => $comment->created_at->format('d M Y H:i')
-                    ];
-                });
+                $formattedArticle['comments'] = $article->comments
+                    ->where('is_approved', true)
+                    ->map(function ($comment) {
+                        return [
+                            'id' => $comment->id,
+                            'name' => $comment->name,
+                            'message' => $comment->message,
+                            'created_at' => $comment->created_at->toIso8601String(),
+                            'created_at_formatted' => $comment->created_at->format('d M Y H:i')
+                        ];
+                    });
             }
         } else {
             // For listing, provide a preview of the content
