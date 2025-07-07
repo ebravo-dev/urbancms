@@ -146,123 +146,134 @@
                             <x-input-error :messages="$errors->get('investment')" class="mt-2" />
                         </div>
                         
-                        <!-- Imágenes actuales y eliminación -->
+                        <!-- Gestión de imágenes -->
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900">Imágenes Actuales</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
-                                @if($property->image1)
-                                    <div class="relative group">
-                                        <img src="{{ asset('storage/' . $property->image1) }}" 
-                                             class="h-32 w-full object-cover rounded-lg">
-                                        <div class="mt-2">
-                                            <label class="inline-flex items-center">
-                                                <input type="checkbox" name="delete_image1" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                                <span class="ml-2 text-sm text-red-600 font-medium">Eliminar imagen 1</span>
-                                            </label>
-                                        </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Imágenes Actuales</h3>
+                            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                <p class="text-sm text-blue-800">
+                                    <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Optimización automática:</strong> Las imágenes se convertirán automáticamente a formato WebP para mejor rendimiento web. Tamaño máximo: 1200x800px, calidad: 85%.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <!-- Imagen 1 -->
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        @if($property->image1)
+                                            <img id="current-image-1" src="{{ asset('storage/' . $property->image1) }}" 
+                                                 class="h-32 w-full object-cover rounded-lg border-2 border-gray-200">
+                                        @else
+                                            <div id="current-image-1" class="h-32 w-full bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                                                <span class="text-gray-500 text-sm">Sin imagen</span>
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
-                                
-                                @if($property->image2)
-                                    <div class="relative group">
-                                        <img src="{{ asset('storage/' . $property->image2) }}" 
-                                             class="h-32 w-full object-cover rounded-lg">
-                                        <div class="mt-2">
-                                            <label class="inline-flex items-center">
-                                                <input type="checkbox" name="delete_image2" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                                <span class="ml-2 text-sm text-red-600 font-medium">Eliminar imagen 2</span>
-                                            </label>
+                                    <div>
+                                        <label for="image1" class="cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                            </svg>
+                                            Elegir archivo
+                                        </label>
+                                        <input type="file" name="image1" id="image1" class="hidden" accept="image/*,.webp">
+                                        <p class="text-xs text-gray-500 mt-1">Imagen 1</p>
+                                        <div id="preview-image1" class="mt-2 hidden">
+                                            <img id="img-preview-1" src="" class="h-32 w-full object-cover rounded-lg border-2 border-indigo-300" alt="Vista previa imagen 1">
+                                            <p class="text-xs text-indigo-600 mt-1">Nueva imagen seleccionada</p>
                                         </div>
+                                        <x-input-error :messages="$errors->get('image1')" class="mt-2" />
                                     </div>
-                                @endif
-                                
-                                @if($property->image3)
-                                    <div class="relative group">
-                                        <img src="{{ asset('storage/' . $property->image3) }}" 
-                                             class="h-32 w-full object-cover rounded-lg">
-                                        <div class="mt-2">
-                                            <label class="inline-flex items-center">
-                                                <input type="checkbox" name="delete_image3" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                                <span class="ml-2 text-sm text-red-600 font-medium">Eliminar imagen 3</span>
-                                            </label>
+                                </div>
+
+                                <!-- Imagen 2 -->
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        @if($property->image2)
+                                            <img id="current-image-2" src="{{ asset('storage/' . $property->image2) }}" 
+                                                 class="h-32 w-full object-cover rounded-lg border-2 border-gray-200">
+                                        @else
+                                            <div id="current-image-2" class="h-32 w-full bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                                                <span class="text-gray-500 text-sm">Sin imagen</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <label for="image2" class="cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                            </svg>
+                                            Elegir archivo
+                                        </label>
+                                        <input type="file" name="image2" id="image2" class="hidden" accept="image/*,.webp">
+                                        <p class="text-xs text-gray-500 mt-1">Imagen 2</p>
+                                        <div id="preview-image2" class="mt-2 hidden">
+                                            <img id="img-preview-2" src="" class="h-32 w-full object-cover rounded-lg border-2 border-indigo-300" alt="Vista previa imagen 2">
+                                            <p class="text-xs text-indigo-600 mt-1">Nueva imagen seleccionada</p>
                                         </div>
+                                        <x-input-error :messages="$errors->get('image2')" class="mt-2" />
                                     </div>
-                                @endif
-                                
-                                @if($property->image4)
-                                    <div class="relative group">
-                                        <img src="{{ asset('storage/' . $property->image4) }}" 
-                                             class="h-32 w-full object-cover rounded-lg">
-                                        <div class="mt-2">
-                                            <label class="inline-flex items-center">
-                                                <input type="checkbox" name="delete_image4" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                                <span class="ml-2 text-sm text-red-600 font-medium">Eliminar imagen 4</span>
-                                            </label>
+                                </div>
+
+                                <!-- Imagen 3 -->
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        @if($property->image3)
+                                            <img id="current-image-3" src="{{ asset('storage/' . $property->image3) }}" 
+                                                 class="h-32 w-full object-cover rounded-lg border-2 border-gray-200">
+                                        @else
+                                            <div id="current-image-3" class="h-32 w-full bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                                                <span class="text-gray-500 text-sm">Sin imagen</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <label for="image3" class="cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                            </svg>
+                                            Elegir archivo
+                                        </label>
+                                        <input type="file" name="image3" id="image3" class="hidden" accept="image/*,.webp">
+                                        <p class="text-xs text-gray-500 mt-1">Imagen 3</p>
+                                        <div id="preview-image3" class="mt-2 hidden">
+                                            <img id="img-preview-3" src="" class="h-32 w-full object-cover rounded-lg border-2 border-indigo-300" alt="Vista previa imagen 3">
+                                            <p class="text-xs text-indigo-600 mt-1">Nueva imagen seleccionada</p>
                                         </div>
+                                        <x-input-error :messages="$errors->get('image3')" class="mt-2" />
                                     </div>
-                                @endif
-                            </div>
-                        </div>
+                                </div>
 
-                        <!-- Nuevas imágenes -->
-                        <div>
-                            <x-input-label for="image1" :value="__('IMAGEN 1')" />
-                            <input type="file" name="image1" id="image1" class="block w-full text-sm text-gray-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-md file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
-                            <div id="preview-image1" class="mt-2 hidden">
-                                <img id="img-preview-1" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 1">
+                                <!-- Imagen 4 -->
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        @if($property->image4)
+                                            <img id="current-image-4" src="{{ asset('storage/' . $property->image4) }}" 
+                                                 class="h-32 w-full object-cover rounded-lg border-2 border-gray-200">
+                                        @else
+                                            <div id="current-image-4" class="h-32 w-full bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                                                <span class="text-gray-500 text-sm">Sin imagen</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <label for="image4" class="cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                            </svg>
+                                            Elegir archivo
+                                        </label>
+                                        <input type="file" name="image4" id="image4" class="hidden" accept="image/*,.webp">
+                                        <p class="text-xs text-gray-500 mt-1">Imagen 4</p>
+                                        <div id="preview-image4" class="mt-2 hidden">
+                                            <img id="img-preview-4" src="" class="h-32 w-full object-cover rounded-lg border-2 border-indigo-300" alt="Vista previa imagen 4">
+                                            <p class="text-xs text-indigo-600 mt-1">Nueva imagen seleccionada</p>
+                                        </div>
+                                        <x-input-error :messages="$errors->get('image4')" class="mt-2" />
+                                    </div>
+                                </div>
                             </div>
-                            <x-input-error :messages="$errors->get('image1')" class="mt-2" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="image2" :value="__('IMAGEN 2')" />
-                            <input type="file" name="image2" id="image2" class="block w-full text-sm text-gray-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-md file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
-                            <div id="preview-image2" class="mt-2 hidden">
-                                <img id="img-preview-2" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 2">
-                            </div>
-                            <x-input-error :messages="$errors->get('image2')" class="mt-2" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="image3" :value="__('IMAGEN 3')" />
-                            <input type="file" name="image3" id="image3" class="block w-full text-sm text-gray-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-md file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
-                            <div id="preview-image3" class="mt-2 hidden">
-                                <img id="img-preview-3" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 3">
-                            </div>
-                            <x-input-error :messages="$errors->get('image3')" class="mt-2" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="image4" :value="__('IMAGEN 4')" />
-                            <input type="file" name="image4" id="image4" class="block w-full text-sm text-gray-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-md file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
-                            <div id="preview-image4" class="mt-2 hidden">
-                                <img id="img-preview-4" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 4">
-                            </div>
-                            <x-input-error :messages="$errors->get('image4')" class="mt-2" />
                         </div>
                         
                         <div class="flex items-center justify-end mt-6">
@@ -279,225 +290,16 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
-        // Sortable.js para reordenar imágenes
-        const sortableList = document.getElementById('sortable-images');
-        if (sortableList) {
-            const sortable = new Sortable(sortableList, {
-                animation: 150,
-                ghostClass: 'bg-indigo-100',
-                onEnd: function(evt) {
-                    // Enviar el nuevo orden al servidor
-                    const imageIds = Array.from(sortableList.children)
-                        .map(item => item.getAttribute('data-id'));
-                    
-                    fetch('{{ route("properties.reorder-images", $property) }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ images: imageIds })
-                    })
-                    .then(response => response.json())
-                    .then data => {
-                        if (data.success) {
-                            // Mostrar mensaje de éxito
-                            const successMessage = document.createElement('div');
-                            successMessage.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4';
-                            successMessage.innerHTML = '<span class="block sm:inline">Orden actualizado correctamente</span>';
-                            sortableList.parentNode.insertBefore(successMessage, sortableList);
-                            
-                            // Ocultar el mensaje después de 3 segundos
-                            setTimeout(() => {
-                                successMessage.remove();
-                            }, 3000);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            });
-        }
-
-        // Handle deletion indicators for existing images
-        const deleteCheckboxes = document.querySelectorAll('input[name="delete_images[]"]');
-        deleteCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const imageId = this.value;
-                const indicator = document.getElementById(`delete_indicator_${imageId}`);
-                
-                if (this.checked) {
-                    indicator.classList.remove('hidden');
-                } else {
-                    indicator.classList.add('hidden');
-                }
-            });
-        });
-        
-        // Preview new images before upload and validate max 4 images
-        document.getElementById('new_images').addEventListener('change', function(event) {
-            // Count existing images (not marked for deletion)
-            const existingImages = document.querySelectorAll('#sortable-images > div').length;
-            const markedForDeletion = document.querySelectorAll('input[name="delete_images[]"]:checked').length;
-            const remainingImages = existingImages - markedForDeletion;
-            
-            if (event.target.files.length + remainingImages > 4) {
-                alert(`Solo puedes tener un máximo de 4 imágenes. Puedes añadir ${4 - remainingImages} imágenes más.`);
-                event.target.value = '';
-                return;
-            }
-            
-            const preview = document.getElementById('image-preview');
-            preview.innerHTML = '';
-            
-            for (const file of event.target.files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'relative';
-                    
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'h-32 w-full object-cover rounded';
-                    
-                    div.appendChild(img);
-                    preview.appendChild(div);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Preview datasheet before upload
-        document.getElementById('datasheet').addEventListener('change', function(event) {
-            const preview = document.getElementById('datasheet-preview');
-            preview.innerHTML = '';
-            
-            if (event.target.files.length > 0) {
-                const file = event.target.files[0];
-                const fileName = file.name;
-                
-                const div = document.createElement('div');
-                div.className = 'mt-2 flex items-center';
-                
-                const iconClass = fileName.match(/\.(pdf)$/i) ? 'text-red-500' : 
-                                 fileName.match(/\.(doc|docx)$/i) ? 'text-blue-500' : 'text-green-500';
-                
-                div.innerHTML = `
-                    <svg class="h-5 w-5 ${iconClass}" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="ml-2 text-sm text-gray-900">${fileName}</span>
-                `;
-                
-                preview.appendChild(div);
-            }
-        });
-        
-        // Drag and drop functionality for new images
-        const imagesDropzone = document.querySelector('label[for="new_images"]').closest('div');
-        
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            imagesDropzone.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        
-        ['dragenter', 'dragover'].forEach(eventName => {
-            imagesDropzone.addEventListener(eventName, highlight, false);
-        });
-        
-        ['dragleave', 'drop'].forEach(eventName => {
-            imagesDropzone.addEventListener(eventName, unhighlight, false);
-        });
-        
-        function highlight() {
-            imagesDropzone.closest('.border-dashed').classList.add('border-indigo-500', 'bg-indigo-50');
-            imagesDropzone.closest('.border-dashed').classList.remove('border-gray-300');
-        }
-        
-        function unhighlight() {
-            imagesDropzone.closest('.border-dashed').classList.remove('border-indigo-500', 'bg-indigo-50');
-            imagesDropzone.closest('.border-dashed').classList.add('border-gray-300');
-        }
-        
-        imagesDropzone.addEventListener('drop', handleImagesDrop, false);
-        
-        function handleImagesDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            
-            // Count existing images (not marked for deletion)
-            const existingImages = document.querySelectorAll('#sortable-images > div').length;
-            const markedForDeletion = document.querySelectorAll('input[name="delete_images[]"]:checked').length;
-            const remainingImages = existingImages - markedForDeletion;
-            
-            if (files.length + remainingImages > 4) {
-                alert(`Solo puedes tener un máximo de 4 imágenes. Puedes añadir ${4 - remainingImages} imágenes más.`);
-                return;
-            }
-            
-            document.getElementById('new_images').files = files;
-            
-            // Trigger change event to preview images
-            const event = new Event('change');
-            document.getElementById('new_images').dispatchEvent(event);
-        }
-        
-        // Drag and drop functionality for datasheet
-        const datasheetDropzone = document.querySelector('label[for="datasheet"]').closest('div');
-        
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            datasheetDropzone.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        ['dragenter', 'dragover'].forEach(eventName => {
-            datasheetDropzone.addEventListener(eventName, highlightDatasheet, false);
-        });
-        
-        ['dragleave', 'drop'].forEach(eventName => {
-            datasheetDropzone.addEventListener(eventName, unhighlightDatasheet, false);
-        });
-        
-        function highlightDatasheet() {
-            datasheetDropzone.closest('.border-dashed').classList.add('border-indigo-500', 'bg-indigo-50');
-            datasheetDropzone.closest('.border-dashed').classList.remove('border-gray-300');
-        }
-        
-        function unhighlightDatasheet() {
-            datasheetDropzone.closest('.border-dashed').classList.remove('border-indigo-500', 'bg-indigo-50');
-            datasheetDropzone.closest('.border-dashed').classList.add('border-gray-300');
-        }
-        
-        datasheetDropzone.addEventListener('drop', handleDatasheetDrop, false);
-        
-        function handleDatasheetDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            if (files.length > 0) {
-                const fileList = new DataTransfer();
-                fileList.items.add(files[0]);
-                document.getElementById('datasheet').files = fileList.files;
-                
-                // Trigger change event to preview datasheet
-                const event = new Event('change');
-                document.getElementById('datasheet').dispatchEvent(event);
-            }
-        }
-        
-        // Funcionalidad de previsualización para imágenes individuales
+        // Funcionalidad de previsualización mejorada para imágenes
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing image previews...');
             
-            function setupImagePreview(inputId, previewId, imgId) {
+            function setupImagePreview(inputId, previewId, imgId, currentImageId) {
                 const input = document.getElementById(inputId);
                 const preview = document.getElementById(previewId);
                 const img = document.getElementById(imgId);
+                const currentImage = document.getElementById(currentImageId);
                 
                 console.log('Setting up preview for:', inputId, input, preview, img);
                 
@@ -512,6 +314,11 @@
                                 console.log('File read successful for:', inputId);
                                 img.src = e.target.result;
                                 preview.classList.remove('hidden');
+                                
+                                // Opcionalmente, ocultar la imagen actual cuando se selecciona una nueva
+                                if (currentImage) {
+                                    currentImage.style.opacity = '0.5';
+                                }
                             };
                             reader.onerror = function() {
                                 console.error('Error reading file for:', inputId);
@@ -521,6 +328,11 @@
                             console.log('No valid image file selected for:', inputId);
                             img.src = '';
                             preview.classList.add('hidden');
+                            
+                            // Restaurar opacidad de la imagen actual
+                            if (currentImage) {
+                                currentImage.style.opacity = '1';
+                            }
                         }
                     });
                 } else {
@@ -529,10 +341,10 @@
             }
             
             // Configurar previsualización para cada imagen
-            setupImagePreview('image1', 'preview-image1', 'img-preview-1');
-            setupImagePreview('image2', 'preview-image2', 'img-preview-2');
-            setupImagePreview('image3', 'preview-image3', 'img-preview-3');
-            setupImagePreview('image4', 'preview-image4', 'img-preview-4');
+            setupImagePreview('image1', 'preview-image1', 'img-preview-1', 'current-image-1');
+            setupImagePreview('image2', 'preview-image2', 'img-preview-2', 'current-image-2');
+            setupImagePreview('image3', 'preview-image3', 'img-preview-3', 'current-image-3');
+            setupImagePreview('image4', 'preview-image4', 'img-preview-4', 'current-image-4');
             
             console.log('Image preview setup completed');
         });

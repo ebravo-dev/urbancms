@@ -19,7 +19,7 @@ class CommentController extends Controller
      */
     public function index(Article $article): JsonResponse
     {
-        try {
+        try {   
             $comments = $article->comments()
                 ->where('is_approved', true)
                 ->orderBy('created_at', 'desc')

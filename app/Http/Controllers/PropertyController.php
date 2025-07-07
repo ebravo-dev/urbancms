@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\PropertyImage;
+use App\Traits\HandlesImageProcessing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
+    use HandlesImageProcessing;
     /**
      * Display a listing of the resource.
      */
@@ -46,53 +48,35 @@ class PropertyController extends Controller
             'feature7' => 'nullable|string|max:255',
             'feature8' => 'nullable|string|max:255',
             'investment' => 'nullable|numeric',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
-        // Store property
-        $property = new Property();
-        $property->is_for_sale = $validated['is_for_sale'];
-        $property->location_line1 = $validated['location_line1'] ?? null;
-        $property->location_line2 = $validated['location_line2'] ?? null;
-        $property->location_line3 = $validated['location_line3'] ?? null;
-        $property->google_maps_url = $validated['google_maps_url'] ?? null;
-        $property->feature1 = $validated['feature1'] ?? null;
-        $property->feature2 = $validated['feature2'] ?? null;
-        $property->feature3 = $validated['feature3'] ?? null;
-        $property->feature4 = $validated['feature4'] ?? null;
-        $property->feature5 = $validated['feature5'] ?? null;
-        $property->feature6 = $validated['feature6'] ?? null;
-        $property->feature7 = $validated['feature7'] ?? null;
-        $property->feature8 = $validated['feature8'] ?? null;
-        $property->investment = $validated['investment'] ?? null;
+        // Crear la propiedad con datos básicos
+        $propertyData = collect($validated)->except(['image1', 'image2', 'image3', 'image4'])->toArray();
+        
+        // Procesar y convertir imágenes a WebP
+        $imageData = $this->processImages(
+            ['image1', 'image2', 'image3', 'image4'],
+            $request,
+            null,
+            'property-images',
+            [
+                'max_width' => config('image.property_max_width', 1200),
+                'max_height' => config('image.property_max_height', 800),
+                'quality' => config('image.quality', 85),
+            ]
+        );
 
-        // Store images if provided
-        if ($request->hasFile('image1')) {
-            $imagePath = $request->file('image1')->store('property-images', 'public');
-            $property->image1 = $imagePath;
-        }
+        // Merge de datos de propiedad e imágenes
+        $propertyData = array_merge($propertyData, $imageData);
 
-        if ($request->hasFile('image2')) {
-            $imagePath = $request->file('image2')->store('property-images', 'public');
-            $property->image2 = $imagePath;
-        }
+        // Crear propiedad
+        $property = Property::create($propertyData);
 
-        if ($request->hasFile('image3')) {
-            $imagePath = $request->file('image3')->store('property-images', 'public');
-            $property->image3 = $imagePath;
-        }
-
-        if ($request->hasFile('image4')) {
-            $imagePath = $request->file('image4')->store('property-images', 'public');
-            $property->image4 = $imagePath;
-        }
-
-        $property->save();
-
-        return redirect()->route('properties.index')->with('success', 'Propiedad creada exitosamente');
+        return redirect()->route('properties.index')->with('success', 'Propiedad creada exitosamente. Las imágenes han sido optimizadas automáticamente.');
     }
 
     /**
@@ -131,97 +115,35 @@ class PropertyController extends Controller
             'feature7' => 'nullable|string|max:255',
             'feature8' => 'nullable|string|max:255',
             'investment' => 'nullable|numeric',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'delete_image1' => 'nullable|boolean',
-            'delete_image2' => 'nullable|boolean',
-            'delete_image3' => 'nullable|boolean',
-            'delete_image4' => 'nullable|boolean',
+            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
-        // Update property
-        $property->is_for_sale = $validated['is_for_sale'];
-        $property->location_line1 = $validated['location_line1'] ?? null;
-        $property->location_line2 = $validated['location_line2'] ?? null;
-        $property->location_line3 = $validated['location_line3'] ?? null;
-        $property->google_maps_url = $validated['google_maps_url'] ?? null;
-        $property->feature1 = $validated['feature1'] ?? null;
-        $property->feature2 = $validated['feature2'] ?? null;
-        $property->feature3 = $validated['feature3'] ?? null;
-        $property->feature4 = $validated['feature4'] ?? null;
-        $property->feature5 = $validated['feature5'] ?? null;
-        $property->feature6 = $validated['feature6'] ?? null;
-        $property->feature7 = $validated['feature7'] ?? null;
-        $property->feature8 = $validated['feature8'] ?? null;
-        $property->investment = $validated['investment'] ?? null;
+        // Actualizar datos básicos de la propiedad
+        $propertyData = collect($validated)->except(['image1', 'image2', 'image3', 'image4'])->toArray();
+        
+        // Procesar y convertir imágenes a WebP (reemplazando las existentes)
+        $imageData = $this->processImages(
+            ['image1', 'image2', 'image3', 'image4'],
+            $request,
+            $property,
+            'property-images',
+            [
+                'max_width' => config('image.property_max_width', 1200),
+                'max_height' => config('image.property_max_height', 800),
+                'quality' => config('image.quality', 85),
+            ]
+        );
 
-        // Handle image deletions
-        if ($request->has('delete_image1') && $request->delete_image1) {
-            if ($property->image1) {
-                Storage::disk('public')->delete($property->image1);
-                $property->image1 = null;
-            }
-        }
+        // Merge de datos de propiedad e imágenes
+        $propertyData = array_merge($propertyData, $imageData);
 
-        if ($request->has('delete_image2') && $request->delete_image2) {
-            if ($property->image2) {
-                Storage::disk('public')->delete($property->image2);
-                $property->image2 = null;
-            }
-        }
+        // Actualizar propiedad
+        $property->update($propertyData);
 
-        if ($request->has('delete_image3') && $request->delete_image3) {
-            if ($property->image3) {
-                Storage::disk('public')->delete($property->image3);
-                $property->image3 = null;
-            }
-        }
-
-        if ($request->has('delete_image4') && $request->delete_image4) {
-            if ($property->image4) {
-                Storage::disk('public')->delete($property->image4);
-                $property->image4 = null;
-            }
-        }
-
-        // Update images if provided
-        if ($request->hasFile('image1')) {
-            if ($property->image1) {
-                Storage::disk('public')->delete($property->image1);
-            }
-            $imagePath = $request->file('image1')->store('property-images', 'public');
-            $property->image1 = $imagePath;
-        }
-
-        if ($request->hasFile('image2')) {
-            if ($property->image2) {
-                Storage::disk('public')->delete($property->image2);
-            }
-            $imagePath = $request->file('image2')->store('property-images', 'public');
-            $property->image2 = $imagePath;
-        }
-
-        if ($request->hasFile('image3')) {
-            if ($property->image3) {
-                Storage::disk('public')->delete($property->image3);
-            }
-            $imagePath = $request->file('image3')->store('property-images', 'public');
-            $property->image3 = $imagePath;
-        }
-
-        if ($request->hasFile('image4')) {
-            if ($property->image4) {
-                Storage::disk('public')->delete($property->image4);
-            }
-            $imagePath = $request->file('image4')->store('property-images', 'public');
-            $property->image4 = $imagePath;
-        }
-
-        $property->save();
-
-        return redirect()->route('properties.index')->with('success', 'Propiedad actualizada exitosamente');
+        return redirect()->route('properties.index')->with('success', 'Propiedad actualizada exitosamente. Las imágenes han sido optimizadas automáticamente.');
     }
 
     /**
@@ -229,19 +151,11 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        // Delete all images
-        if ($property->image1) {
-            Storage::disk('public')->delete($property->image1);
-        }
-        if ($property->image2) {
-            Storage::disk('public')->delete($property->image2);
-        }
-        if ($property->image3) {
-            Storage::disk('public')->delete($property->image3);
-        }
-        if ($property->image4) {
-            Storage::disk('public')->delete($property->image4);
-        }
+        // Delete all images using the trait method
+        $this->deleteOldImage($property->image1);
+        $this->deleteOldImage($property->image2);
+        $this->deleteOldImage($property->image3);
+        $this->deleteOldImage($property->image4);
 
         $property->delete();
 

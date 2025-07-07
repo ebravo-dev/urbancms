@@ -155,13 +155,21 @@
 
                         <!-- Imágenes -->
                         <div>
+                            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                <p class="text-sm text-blue-800">
+                                    <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Optimización automática:</strong> Las imágenes se convertirán automáticamente a formato WebP para mejor rendimiento web. Tamaño máximo: 1200x800px, calidad: 85%.
+                                </p>
+                            </div>
                             <x-input-label for="image1" :value="__('IMAGEN 1')" />
                             <input type="file" name="image1" id="image1" class="block w-full text-sm text-gray-500
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-md file:border-0
                               file:text-sm file:font-semibold
                               file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
+                              hover:file:bg-indigo-100" accept="image/*,.webp">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
                             <div id="preview-image1" class="mt-2 hidden">
                                 <img id="img-preview-1" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 1">
@@ -176,7 +184,7 @@
                               file:rounded-md file:border-0
                               file:text-sm file:font-semibold
                               file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
+                              hover:file:bg-indigo-100" accept="image/*,.webp">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
                             <div id="preview-image2" class="mt-2 hidden">
                                 <img id="img-preview-2" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 2">
@@ -191,7 +199,7 @@
                               file:rounded-md file:border-0
                               file:text-sm file:font-semibold
                               file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
+                              hover:file:bg-indigo-100" accept="image/*,.webp">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
                             <div id="preview-image3" class="mt-2 hidden">
                                 <img id="img-preview-3" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 3">
@@ -206,7 +214,7 @@
                               file:rounded-md file:border-0
                               file:text-sm file:font-semibold
                               file:bg-indigo-50 file:text-indigo-700
-                              hover:file:bg-indigo-100" accept="image/*">
+                              hover:file:bg-indigo-100" accept="image/*,.webp">
                             <p class="text-xs text-gray-500 mt-1">Cargar desde PC</p>
                             <div id="preview-image4" class="mt-2 hidden">
                                 <img id="img-preview-4" src="" class="h-32 w-auto object-cover rounded-lg border border-gray-300" alt="Vista previa imagen 4">

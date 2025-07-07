@@ -102,7 +102,15 @@
 
                         <div class="mb-4">
                             <label for="images" class="block text-sm font-medium text-gray-700">Añadir nuevas imágenes</label>
-                            <input type="file" name="images[]" id="images" class="mt-1 block w-full" multiple accept="image/*" onchange="previewNewImages(event)">
+                            <div class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                <p class="text-sm text-blue-800">
+                                    <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <strong>Optimización automática:</strong> Las imágenes se convertirán automáticamente a formato WebP para mejor rendimiento web. Tamaño máximo: 1200x800px, calidad: 85%.
+                                </p>
+                            </div>
+                            <input type="file" name="images[]" id="images" class="mt-1 block w-full" multiple accept="image/*,.webp" onchange="previewNewImages(event)">
                             @error('images.*')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror

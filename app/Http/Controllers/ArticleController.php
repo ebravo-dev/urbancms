@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\ArticleImage;
+use App\Traits\HandlesImageProcessing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +12,7 @@ use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
+    use HandlesImageProcessing;
     /**
      * Display a listing of the articles.
      */
@@ -42,7 +44,7 @@ class ArticleController extends Controller
             'description' => 'nullable|string|max:1000',
             'publication_date' => 'nullable|date',
             'content' => 'required|string', // Cambiar de json a string para mayor flexibilidad
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'datasheet' => 'nullable|file|max:2048|mimes:pdf,doc,docx,jpg,jpeg,png',
             'meta_title' => 'nullable|string|max:70', // Recomendación SEO para meta título
             'meta_description' => 'nullable|string|max:160', // Recomendación SEO para meta descripción
@@ -81,7 +83,16 @@ class ArticleController extends Controller
         if ($request->hasFile('images')) {
             $order = 0;
             foreach ($request->file('images') as $image) {
-                $path = $image->store('articles', 'public');
+                // Convertir imagen a WebP usando el trait
+                $path = $this->storeImageAsWebP(
+                    $image, 
+                    'articles',
+                    [
+                        'max_width' => config('image.article_max_width', 1200),
+                        'max_height' => config('image.article_max_height', 800),
+                        'quality' => config('image.quality', 85),
+                    ]
+                );
 
                 ArticleImage::create([
                     'article_id' => $article->id,
@@ -127,7 +138,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'publication_date' => 'nullable|date',
             'content' => 'required|json',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'meta_title' => 'nullable|string|max:70',
             'meta_description' => 'nullable|string|max:160',
             'keywords' => 'nullable|string|max:255',
@@ -162,7 +173,16 @@ class ArticleController extends Controller
         if ($request->hasFile('images')) {
             $maxOrder = $article->images()->max('display_order') ?? -1;
             foreach ($request->file('images') as $image) {
-                $path = $image->store('articles', 'public');
+                // Convertir imagen a WebP usando el trait
+                $path = $this->storeImageAsWebP(
+                    $image, 
+                    'articles',
+                    [
+                        'max_width' => config('image.article_max_width', 1200),
+                        'max_height' => config('image.article_max_height', 800),
+                        'quality' => config('image.quality', 85),
+                    ]
+                );
 
                 ArticleImage::create([
                     'article_id' => $article->id,
@@ -180,9 +200,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        // Delete associated images from storage
+        // Delete associated images from storage using the trait method
         foreach ($article->images as $image) {
-            Storage::disk('public')->delete($image->image_path);
+            $this->deleteOldImage($image->image_path);
         }
 
         $article->delete();
@@ -212,7 +232,7 @@ class ArticleController extends Controller
      */
     public function deleteImage(ArticleImage $image)
     {
-        Storage::disk('public')->delete($image->image_path);
+        $this->deleteOldImage($image->image_path);
         $image->delete();
 
         return redirect()->back()->with('success', 'Imagen eliminada exitosamente');
