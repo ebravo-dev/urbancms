@@ -73,14 +73,9 @@ class ConvertImagesToWebP extends Command
                         
                         if (!$dryRun) {
                             try {
-                                // Get file content
-                                $fileContent = Storage::disk('public')->get($property->$field);
-                                $tempFile = tmpfile();
-                                fwrite($tempFile, $fileContent);
-                                
-                                // Convert to WebP
-                                $newPath = $this->storeImageAsWebP(
-                                    $tempFile,
+                                // Convert to WebP using existing image method
+                                $newPath = $this->convertExistingImageToWebP(
+                                    $property->$field,
                                     'property-images',
                                     [
                                         'max_width' => config('image.property_max_width', 1200),
@@ -100,7 +95,6 @@ class ConvertImagesToWebP extends Command
                                 $convertedCount++;
                                 $this->line("   ✅ Converted to: {$newPath}");
                                 
-                                fclose($tempFile);
                             } catch (\Exception $e) {
                                 $this->error("   ❌ Failed to convert: {$property->$field} - {$e->getMessage()}");
                             }
@@ -135,14 +129,9 @@ class ConvertImagesToWebP extends Command
                 
                 if (!$dryRun) {
                     try {
-                        // Get file content
-                        $fileContent = Storage::disk('public')->get($articleImage->image_path);
-                        $tempFile = tmpfile();
-                        fwrite($tempFile, $fileContent);
-                        
-                        // Convert to WebP
-                        $newPath = $this->storeImageAsWebP(
-                            $tempFile,
+                        // Convert to WebP using existing image method
+                        $newPath = $this->convertExistingImageToWebP(
+                            $articleImage->image_path,
                             'articles',
                             [
                                 'max_width' => config('image.article_max_width', 1200),
@@ -162,7 +151,6 @@ class ConvertImagesToWebP extends Command
                         $convertedCount++;
                         $this->line("   ✅ Converted to: {$newPath}");
                         
-                        fclose($tempFile);
                     } catch (\Exception $e) {
                         $this->error("   ❌ Failed to convert: {$articleImage->image_path} - {$e->getMessage()}");
                     }

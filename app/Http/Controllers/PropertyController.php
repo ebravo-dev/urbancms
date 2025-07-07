@@ -67,6 +67,21 @@ class PropertyController extends Controller
                 'max_width' => config('image.property_max_width', 1200),
                 'max_height' => config('image.property_max_height', 800),
                 'quality' => config('image.quality', 85),
+                'context' => [
+                    'type' => 'property',
+                    'is_for_sale' => $validated['is_for_sale'] ?? null,
+                    'location_line1' => $validated['location_line1'] ?? null,
+                    'location_line2' => $validated['location_line2'] ?? null,
+                    'location_line3' => $validated['location_line3'] ?? null,
+                    'feature1' => $validated['feature1'] ?? null,
+                    'feature2' => $validated['feature2'] ?? null,
+                    'feature3' => $validated['feature3'] ?? null,
+                    'feature4' => $validated['feature4'] ?? null,
+                    'feature5' => $validated['feature5'] ?? null,
+                    'feature6' => $validated['feature6'] ?? null,
+                    'feature7' => $validated['feature7'] ?? null,
+                    'feature8' => $validated['feature8'] ?? null,
+                ]
             ]
         );
 
@@ -134,6 +149,21 @@ class PropertyController extends Controller
                 'max_width' => config('image.property_max_width', 1200),
                 'max_height' => config('image.property_max_height', 800),
                 'quality' => config('image.quality', 85),
+                'context' => [
+                    'type' => 'property',
+                    'is_for_sale' => $validated['is_for_sale'] ?? $property->is_for_sale,
+                    'location_line1' => $validated['location_line1'] ?? $property->location_line1,
+                    'location_line2' => $validated['location_line2'] ?? $property->location_line2,
+                    'location_line3' => $validated['location_line3'] ?? $property->location_line3,
+                    'feature1' => $validated['feature1'] ?? $property->feature1,
+                    'feature2' => $validated['feature2'] ?? $property->feature2,
+                    'feature3' => $validated['feature3'] ?? $property->feature3,
+                    'feature4' => $validated['feature4'] ?? $property->feature4,
+                    'feature5' => $validated['feature5'] ?? $property->feature5,
+                    'feature6' => $validated['feature6'] ?? $property->feature6,
+                    'feature7' => $validated['feature7'] ?? $property->feature7,
+                    'feature8' => $validated['feature8'] ?? $property->feature8,
+                ]
             ]
         );
 

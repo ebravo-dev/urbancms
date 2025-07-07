@@ -91,6 +91,12 @@ class ArticleController extends Controller
                         'max_width' => config('image.article_max_width', 1200),
                         'max_height' => config('image.article_max_height', 800),
                         'quality' => config('image.quality', 85),
+                        'context' => [
+                            'type' => 'article',
+                            'title' => $request->title,
+                            'meta_title' => $request->meta_title,
+                            'keywords' => $request->keywords,
+                        ]
                     ]
                 );
 
@@ -181,6 +187,12 @@ class ArticleController extends Controller
                         'max_width' => config('image.article_max_width', 1200),
                         'max_height' => config('image.article_max_height', 800),
                         'quality' => config('image.quality', 85),
+                        'context' => [
+                            'type' => 'article',
+                            'title' => $request->title ?? $article->title,
+                            'meta_title' => $request->meta_title ?? $article->meta_title,
+                            'keywords' => $request->keywords ?? $article->keywords,
+                        ]
                     ]
                 );
 
